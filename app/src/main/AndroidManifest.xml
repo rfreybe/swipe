@@ -3,23 +3,25 @@
     package="de.fhe.ai.pme.swipe">
 
     <application
+        android:name=".core.SwipeApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Swipe"
-        android:name=".core.SwipeApplication">
-
-        <activity android:name=".view.MainActivity" android:label="PME Main">
+        android:theme="@style/Theme.Swipe">
+        <meta-data
+            android:name="com.google.android.actions"
+            ></meta-data>
+        <activity
+            android:name=".view.MainActivity"
+            android:label="PME Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
-
 
 </manifest>
