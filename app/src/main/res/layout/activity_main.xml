@@ -16,25 +16,24 @@
         layout="@layout/main_toolbar">
 
     </include>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:text="Home"
             android:textSize="50sp"
-            android:textStyle="bold"
-            android:gravity="center">
-
+            android:textStyle="bold">
         </TextView>
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:gravity="start"
+        android:layout_gravity="start"
         android:background="@android:color/white">
         <include
             layout="@layout/main_nav_drawer">
-            </include>
-
+        </include>
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

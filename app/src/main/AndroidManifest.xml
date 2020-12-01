@@ -11,8 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Swipe">
         <meta-data
-            android:name="com.google.android.actions"
-            ></meta-data>
+            android:name="com.google.android.actions">
+        </meta-data>
         <activity
             android:name=".view.MainActivity"
             android:label="PME Main">
