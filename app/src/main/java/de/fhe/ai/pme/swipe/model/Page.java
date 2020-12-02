@@ -13,7 +13,7 @@ public class Page {
     @ColumnInfo(name = "pageID")
     private int pageID;
 
-    @ForeignKey(Card)
+    @ForeignKey(entity = Card.class, parentColumns = "cardID", childColumns = "cardID")
     @NonNull
     @ColumnInfo(name = "cardID")
     private int cardID;

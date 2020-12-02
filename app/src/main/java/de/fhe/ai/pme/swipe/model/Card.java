@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 public class Card {
 
     @PrimaryKey
-    @ColumnInfo(name = "cardId")
+    @ColumnInfo(name = "cardID")
     private int cardID;
 
     @NonNull
@@ -20,7 +20,7 @@ public class Card {
     @ColumnInfo(name = "rating")
     private Rating rating;
 
-    @ForeignKey(Folder)
+    @ForeignKey(entity = Folder.class, parentColumns = "folderID", childColumns = "folderID")
     @ColumnInfo(name = "folderID")
     private int folderID;
 

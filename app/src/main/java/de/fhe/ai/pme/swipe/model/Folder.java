@@ -24,7 +24,7 @@ public class Folder {
     @ColumnInfo(name = "parentFolder")
     private Folder parentFolder;
 
-    @ForeignKey(Folder)
+    @ForeignKey(entity = Folder.class, parentColumns = "parentFolderID", childColumns = "folderID")
     @ColumnInfo(name = "parentFolderID")
     private int parentFolderID;
 
