@@ -1,12 +1,13 @@
 package de.fhe.ai.pme.swipe.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.os.Bundle;
 import android.view.View;
 
-import de.fhe.ai.pme.swipe.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.swipe.R;
+
 
 public class Folder extends AppCompatActivity {
 

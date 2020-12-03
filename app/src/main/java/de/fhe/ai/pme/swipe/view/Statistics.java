@@ -6,7 +6,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.Bundle;
 import android.view.View;
 
-import de.fhe.ai.pme.swipe.R;
+import com.example.swipe.R;
+
+
 
 public class Statistics extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -14,7 +16,7 @@ public class Statistics extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_folder);
+        setContentView(R.layout.activity_statistics);
         // Assign Variable
 
         drawerLayout = findViewById(R.id.drawer_layout);

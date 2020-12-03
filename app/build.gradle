@@ -51,6 +51,6 @@ dependencies {
     // Faker Lib for test data generation
     implementation 'com.github.javafaker:javafaker:1.0.2'
 
-    //Material design important !!!
-    implementation 'com.google.android.material:material:1.2.0-alpha06'
+//    //Material design important !!!
+//    implementation 'com.google.android.material:material:1.2.0-alpha06'
 }

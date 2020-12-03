@@ -6,9 +6,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.Bundle;
 import android.view.View;
 
-import com.mifmif.common.regex.Main;
+import com.example.swipe.R;
 
-import de.fhe.ai.pme.swipe.R;
 
 public class FolderSettings extends AppCompatActivity {
 
