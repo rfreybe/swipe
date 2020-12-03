@@ -1,6 +1,5 @@
 package de.fhe.ai.pme.swipe.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -8,26 +7,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
-import de.fhe.ai.pme.swipe.R;
+import com.example.swipe.R;
+
 
 public class MainActivity extends AppCompatActivity {
-    //Initialize variable
+
     DrawerLayout drawerLayout;
 
-    protected void OnCreate(Bundle saveInstanceState){
-        super.onCreate(saveInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Assign variable
         drawerLayout = findViewById(R.id.drawer_layout);
+
     }
+
     public void ClickMenu(View view){
         //Opens drawer
         openDrawer(drawerLayout);
@@ -37,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         //Opens drawer layout
         drawerLayout.openDrawer(GravityCompat.START);
     }
+
     public void ClickLogo(View view){
         //Close drawer
         closeDrawer(drawerLayout);
@@ -52,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public static void redirectActivity(Activity activity, Class aClass) {
         //Redirect activity
         //Initialize intent
@@ -65,16 +62,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void ClickFolder(View view){
         //Redirect Activity to Folder tab
-        redirectActivity(this,Folder.class);
+        redirectActivity(this, Folder.class);
     }
     public void ClickFolderSettings(View view){
         //Redirect Activity to Settings tab
-        redirectActivity(this,FolderSettings.class);
+        redirectActivity(this, FolderSettings.class);
     }
 
     public void ClickStatistics(View view){
         //Redirect Activity to Statistics tab
-        redirectActivity(this,Statistics.class);
+        redirectActivity(this, Statistics.class);
     }
 
     @Override
@@ -83,5 +80,6 @@ public class MainActivity extends AppCompatActivity {
         //Close drawer
         closeDrawer(drawerLayout);
     }
+
 
 }
