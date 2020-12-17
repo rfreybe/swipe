@@ -8,7 +8,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.swipe.R;
 
-
 public class Folder extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
@@ -36,6 +35,14 @@ public class Folder extends AppCompatActivity {
         //recreate activity
         recreate();
     }
+
+    public void ClickAddButton(View view){
+        //checks if you are in a folder if non folder exists you cant create a card
+        //add folder or add card
+        //Creates a Folder
+        MainActivity.redirectActivity(this,CreateFolderOrCard.class);
+    }
+
 
 //    public void ClickSettings(View view){
 //        //Redirect activity Settings

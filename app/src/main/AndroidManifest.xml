@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Swipe">
-        <activity android:name="de.fhe.ai.pme.swipe.view.Statistics"></activity>
+        <activity android:name="de.fhe.ai.pme.swipe.view.FolderConfiguration"></activity>
+        <activity android:name="de.fhe.ai.pme.swipe.view.CardConfiguration" />
+        <activity android:name="de.fhe.ai.pme.swipe.view.CreateFolderOrCard" />
+        <activity android:name="de.fhe.ai.pme.swipe.view.Statistics" />
         <activity android:name="de.fhe.ai.pme.swipe.view.FolderSettings" />
         <activity android:name="de.fhe.ai.pme.swipe.view.Folder" />
         <activity android:name="de.fhe.ai.pme.swipe.view.MainActivity">

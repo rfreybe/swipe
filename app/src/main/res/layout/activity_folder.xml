@@ -14,14 +14,25 @@
         <include
             layout="@layout/main_toolbar">
         </include>
+
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="604dp"
+            android:gravity="center"
             android:text="Folder"
             android:textSize="50sp"
-            android:textStyle="bold"
-            android:gravity="center">
+            android:textStyle="bold">
         </TextView>
+
+        <ImageView
+            android:layout_width="51dp"
+            android:layout_height="51dp"
+            android:layout_marginLeft="330dp"
+            android:onClick="ClickAddButton"
+            android:src="@drawable/ic_add_button">
+        </ImageView>
+
+
     </LinearLayout>
     <RelativeLayout
         android:layout_width="300dp"
