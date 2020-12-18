@@ -6,19 +6,22 @@
     android:layout_height="match_parent"
     tools:context="de.fhe.ai.pme.swipe.view.CardConfiguration">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/second_toolbar"></include>
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Please configure your card!"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -32,7 +35,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp">
 
@@ -56,7 +59,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1">
 
@@ -76,6 +79,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -86,7 +90,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1">
 
@@ -118,10 +122,13 @@
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
-            android:layout_width="251dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="31dp"
+            android:layout_marginEnd="150dp"
+            android:textAlignment="center"
             android:layout_weight="1"
+            android:background="#C19AFF"
             android:text="Save Card"
             android:textSize="30sp"
             tools:ignore="Suspicious0dp">
@@ -131,7 +138,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="32dp"
             android:src="@drawable/ic_submit_changes">
 
         </ImageView>

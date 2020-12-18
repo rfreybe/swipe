@@ -6,19 +6,24 @@
     android:layout_height="match_parent"
     tools:context="de.fhe.ai.pme.swipe.view.CreateFolderOrCard">
 
+    <include
+        android:id="@+id/include2"
+        layout="@layout/second_toolbar">
+    </include>
+
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Do you want to add a card or a folder?"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include2" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +42,7 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:text="Add Card"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="Suspicious0dp">
 
         </TextView>
@@ -63,13 +68,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:text="Add Folder"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="Suspicious0dp">
 
         </TextView>
