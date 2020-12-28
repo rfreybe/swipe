@@ -3,6 +3,7 @@ package de.fhe.ai.pme.swipe.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.swipe.R;
 
@@ -17,4 +18,5 @@ public class FolderConfiguration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_folder_configuration);
     }
+
 }

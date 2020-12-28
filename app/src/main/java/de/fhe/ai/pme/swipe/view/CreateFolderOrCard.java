@@ -28,8 +28,7 @@ public class CreateFolderOrCard extends AppCompatActivity {
     }
 
     public void ClickAddFolder(View view){
-
-
+        MainActivity.redirectActivity(this,FolderConfiguration.class);
     }
 
 }
