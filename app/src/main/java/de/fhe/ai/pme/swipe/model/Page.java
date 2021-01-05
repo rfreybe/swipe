@@ -32,34 +32,27 @@ public class Page {
     @ColumnInfo(name = "created")
     private long created;
 
+    @NonNull
     @ColumnInfo(name = "modified")
     private long modified;
 
-    public Page() {
+    public Page(@NonNull int cardID, @NonNull boolean isFrontPage) {
+        this.cardID = cardID;
+        this.isFrontPage = isFrontPage;
     }
 
     public int getPageID() {
         return pageID;
     }
 
-    public void setPageID(int pageID) {
-        this.pageID = pageID;
-    }
+    public void setPageID(int pageID) { this.pageID = pageID; }
 
     public int getCardID() {
         return cardID;
     }
 
-    public void setCardID(int cardID) {
-        this.cardID = cardID;
-    }
-
     public boolean isFrontPage() {
         return isFrontPage;
-    }
-
-    public void setFrontPage(boolean frontPage) {
-        isFrontPage = frontPage;
     }
 
     public String getText() {
@@ -82,16 +75,12 @@ public class Page {
         return created;
     }
 
-    public void setCreated(long created) {
-        this.created = created;
-    }
+    public void setCreated(long created) { this.created = created; }
 
     public long getModified() {
         return modified;
     }
 
-    public void setModified(long modified) {
-        this.modified = modified;
-    }
+    public void setModified(long modified) { this.modified = modified; }
 }
 

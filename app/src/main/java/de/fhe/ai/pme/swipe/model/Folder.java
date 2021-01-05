@@ -4,14 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class Folder {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "folderID")
     private int folderID;
+
+    @NonNull
+    @ColumnInfo(name = "manualOrderID")
+    private int manualOrderID;
 
     @NonNull
     @ColumnInfo(name = "name")
@@ -20,9 +25,6 @@ public class Folder {
     @NonNull
     @ColumnInfo(name = "color")
     private Color color;
-
-    @ColumnInfo(name = "parentFolder")
-    private Folder parentFolder;
 
     @ForeignKey(entity = Folder.class, parentColumns = "parentFolderID", childColumns = "folderID")
     @ColumnInfo(name = "parentFolderID")
@@ -36,6 +38,15 @@ public class Folder {
     private long modified;
 
     public Folder(@NonNull String name){
+        this.manualOrderID = this.folderID;
+        this.name = name;
+        this.color = Color.grey;
+    }
+
+    @Ignore
+    public Folder(@NonNull String name, int parentFolderID){
+        this.manualOrderID = this.folderID;
+        this.parentFolderID = parentFolderID;
         this.name = name;
         this.color = Color.grey;
     }
@@ -44,8 +55,12 @@ public class Folder {
         return folderID;
     }
 
-    public void setFolderID(int folderID) {
-        this.folderID = folderID;
+    public void setFolderID(int folderID) { this.folderID = folderID; }
+
+    public int getManualOrderID() { return manualOrderID; }
+
+    public void setManualOrderID(int manualOrderID ) {
+        this.manualOrderID = manualOrderID;
     }
 
     @NonNull
@@ -66,14 +81,6 @@ public class Folder {
         this.color = color;
     }
 
-    public Folder getParentFolder() {
-        return parentFolder;
-    }
-
-    public void setParentFolder(Folder parentFolder) {
-        this.parentFolder = parentFolder;
-    }
-
     public int getParentFolderID() {
         return parentFolderID;
     }
@@ -86,9 +93,7 @@ public class Folder {
         return created;
     }
 
-    public void setCreated(long created) {
-        this.created = created;
-    }
+    public void setCreated(long created) { this.created = created; }
 
     public long getModified() {
         return modified;

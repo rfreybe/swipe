@@ -9,9 +9,13 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Card {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "cardID")
     private int cardID;
+
+    @NonNull
+    @ColumnInfo(name = "manualOrderID")
+    private int manualOrderID;
 
     @NonNull
     @ColumnInfo(name = "name")
@@ -20,9 +24,10 @@ public class Card {
     @ColumnInfo(name = "rating")
     private Rating rating;
 
-    @ForeignKey(entity = Folder.class, parentColumns = "folderID", childColumns = "folderID")
-    @ColumnInfo(name = "folderID")
-    private int folderID;
+    @NonNull
+    @ForeignKey(entity = Folder.class, parentColumns = "parentFolderID", childColumns = "parentFolderID")
+    @ColumnInfo(name = "parentFolderID")
+    private int parentFolderID;
 
     @NonNull
     @ColumnInfo(name = "created")
@@ -31,7 +36,9 @@ public class Card {
     @ColumnInfo(name = "modified")
     private long modified;
 
-    public Card(@NonNull String name){
+    public Card(@NonNull String name, @NonNull int parentFolderID){
+        this.manualOrderID = this.cardID;
+        this.parentFolderID = parentFolderID;
         this.name = name;
         this.rating = Rating.red;
     }
@@ -40,8 +47,12 @@ public class Card {
         return cardID;
     }
 
-    public void setCardID(int cardID) {
-        this.cardID = cardID;
+    public void setCardID(int cardID) { this.cardID = cardID; }
+
+    public int getManualOrderID() { return manualOrderID; }
+
+    public void setManualOrderID(int manualOrderID ) {
+        this.manualOrderID = manualOrderID;
     }
 
     @NonNull
@@ -61,27 +72,21 @@ public class Card {
         this.rating = rating;
     }
 
-    public int getFolderID() {
-        return folderID;
-    }
+    public int getParentFolderID() { return parentFolderID; }
 
-    public void setFolderID(int folderID) {
-        this.folderID = folderID;
+    public void setParentFolderID(int parentFolderID) {
+        this.parentFolderID = parentFolderID;
     }
 
     public long getCreated() {
         return created;
     }
 
-    public void setCreated(long created) {
-        this.created = created;
-    }
+    public void setCreated(long created) { this.created = created; }
 
     public long getModified() {
         return modified;
     }
 
-    public void setModified(long modified) {
-        this.modified = modified;
-    }
+    public void setModified(long modified) { this.modified = modified; }
 }
