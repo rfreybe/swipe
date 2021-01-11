@@ -8,6 +8,9 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Card {
+    public enum Rating {
+        GREEN, YELLOW, RED
+    }
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "cardID")
@@ -40,7 +43,7 @@ public class Card {
         this.manualOrderID = this.cardID;
         this.parentFolderID = parentFolderID;
         this.name = name;
-        this.rating = Rating.red;
+        this.rating = Rating.RED;
     }
 
     public int getCardID() {

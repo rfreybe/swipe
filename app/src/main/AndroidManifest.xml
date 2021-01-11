@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.swipe">
+    package="de.fhe.ai.pme.swipe">
 
     <application
+        android:name=".core.SwipeApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Swipe">
-        <activity android:name="de.fhe.ai.pme.swipe.view.FolderConfiguration"></activity>
-        <activity android:name="de.fhe.ai.pme.swipe.view.CardConfiguration" />
-        <activity android:name="de.fhe.ai.pme.swipe.view.CreateFolderOrCard" />
-        <activity android:name="de.fhe.ai.pme.swipe.view.Statistics" />
-        <activity android:name="de.fhe.ai.pme.swipe.view.FolderSettings" />
-        <activity android:name="de.fhe.ai.pme.swipe.view.Folder" />
-        <activity android:name="de.fhe.ai.pme.swipe.view.MainActivity">
+
+        <activity android:name=".view.FolderConfiguration" />
+        <activity android:name=".view.CardConfiguration" />
+        <activity android:name=".view.CreateFolderOrCard" />
+        <activity android:name=".view.Statistics" />
+        <activity android:name=".view.FolderSettings" />
+        <activity android:name=".view.Folder" />
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

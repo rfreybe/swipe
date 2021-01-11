@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Folder {
+    public enum Color {
+        GREY, BLUE, RED, GREEN, ORANGE, YELLOW
+    }
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "folderID")
@@ -37,18 +40,18 @@ public class Folder {
     @ColumnInfo(name = "modified")
     private long modified;
 
+    @Ignore
     public Folder(@NonNull String name){
         this.manualOrderID = this.folderID;
         this.name = name;
-        this.color = Color.grey;
+        this.color = Color.GREY;
     }
 
-    @Ignore
     public Folder(@NonNull String name, int parentFolderID){
         this.manualOrderID = this.folderID;
         this.parentFolderID = parentFolderID;
         this.name = name;
-        this.color = Color.grey;
+        this.color = Color.GREY;
     }
 
     public int getFolderID() {

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.swipe.R;
+import de.fhe.ai.pme.swipe.R;
 
 
 

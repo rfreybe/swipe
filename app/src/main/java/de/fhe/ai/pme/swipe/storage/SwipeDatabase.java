@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 
 import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
+import de.fhe.ai.pme.swipe.model.Page;
 
 
 /*
@@ -28,7 +29,7 @@ import de.fhe.ai.pme.swipe.model.Folder;
     List of classes represent entities (-> models)
     !Changes in the database must result in a higher version number!
  */
-@Database( entities = {Folder.class, Card.class}, version = 2)
+@Database( entities = {Folder.class, Card.class, Page.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class SwipeDatabase extends RoomDatabase {
 
@@ -55,7 +56,7 @@ public abstract class SwipeDatabase extends RoomDatabase {
     Helper methods to ease external usage of ExecutorService
     e.g. perform async database operations
  */
-    public static <T> T query(Callable<T> task)
+    public static <T> T executeWithReturn(Callable<T> task)
             throws ExecutionException, InterruptedException
     {
         return databaseWriteExecutor.invokeAny( Collections.singletonList( task ) );
@@ -77,7 +78,7 @@ public abstract class SwipeDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             SwipeDatabase.class, "swipe_db")
-                            .addCallback(createCallback)
+                            //.addCallback(createCallback)
                             .build();
                 }
             }
@@ -96,9 +97,9 @@ public abstract class SwipeDatabase extends RoomDatabase {
                 SwipeDao dao = INSTANCE.swipeDao();
 
                Faker faker = Faker.instance();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 9; i++)
                 {
-                    Folder folder = new Folder(String.valueOf(i), i + 10);
+                    Folder folder = new Folder(faker.chuckNorris().fact());
                     dao.insert(folder);
                 }
                 Log.i(LOG_TAG_DB, "Inserted 10 values to DB");

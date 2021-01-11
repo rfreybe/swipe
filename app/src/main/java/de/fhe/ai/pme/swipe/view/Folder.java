@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.swipe.R;
+import de.fhe.ai.pme.swipe.R;
 
 public class Folder extends AppCompatActivity {
 

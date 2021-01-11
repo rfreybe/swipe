@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.swipe.R;
+import de.fhe.ai.pme.swipe.R;
 
 
 public class MainActivity extends AppCompatActivity {

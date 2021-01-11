@@ -2,8 +2,8 @@ package de.fhe.ai.pme.swipe.storage;
 
 import androidx.room.TypeConverter;
 
-import de.fhe.ai.pme.swipe.model.Color;
-import de.fhe.ai.pme.swipe.model.Rating;
+import de.fhe.ai.pme.swipe.model.Folder.Color;
+import de.fhe.ai.pme.swipe.model.Card.Rating;
 
 /*
     TypeConverter class used for storing custom data types in the Room database
@@ -14,17 +14,17 @@ public class Converters {
     public static Color stringToColor(String string) {
         switch(string) {
             case ("blue"):
-                return Color.blue;
+                return Color.BLUE;
             case ("red"):
-                return Color.red;
+                return Color.RED;
             case ("green"):
-                return Color.green;
+                return Color.GREEN;
             case ("orange"):
-                return Color.orange;
+                return Color.ORANGE;
             case ("yellow"):
-                return Color.yellow;
+                return Color.YELLOW;
             default:
-                return Color.grey;
+                return Color.GREY;
         }
     }
 
@@ -37,11 +37,11 @@ public class Converters {
     public static Rating stringToRating(String string) {
         switch(string) {
             case("green"):
-                return Rating.green;
+                return Rating.GREEN;
             case("yellow"):
-                return Rating.yellow;
+                return Rating.YELLOW;
             default:
-                return Rating.red;
+                return Rating.RED;
         }
     }
 
