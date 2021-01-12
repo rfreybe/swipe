@@ -5,11 +5,15 @@ import android.preference.SwitchPreference;
 
 import com.github.javafaker.Faker;
 
+import java.security.Key;
+
 import de.fhe.ai.pme.swipe.model.Folder;
+import de.fhe.ai.pme.swipe.storage.KeyValueStore;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 
-
 public class SwipeApplication extends Application {
+    private KeyValueStore store;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -21,4 +25,13 @@ public class SwipeApplication extends Application {
         repository.insert( new Folder(faker.chuckNorris().fact()));
         repository.insert( new Folder(faker.chuckNorris().fact(), 1));
     }
+
+    public KeyValueStore getStore() {
+        if (this.store == null ) {
+            this.store = new KeyValueStore(this);
+        }
+        return this.store;
+    }
 }
+
+
