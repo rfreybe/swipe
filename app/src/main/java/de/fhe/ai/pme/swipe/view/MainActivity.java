@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    //PARENT FOLDER ID INCLUDE TODO
     public static void redirectActivity(Activity activity, Class aClass) {
         //Redirect activity
         //Initialize intent
@@ -59,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
         //Start Activity
         activity.startActivity(intent);
     }
+
+
+
+
+
+    //Redirects Activity !!!!
 
     public void ClickFolder(View view){
         //Redirect Activity to Folder tab

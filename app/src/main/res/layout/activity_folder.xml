@@ -38,12 +38,14 @@
                 android:gravity="center"
                 android:text="Folder"
                 android:textSize="50sp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold">
+            </TextView>
         </LinearLayout>
 
         <include
             android:id="@+id/include3"
-            layout="@layout/main_toolbar"></include>
+            layout="@layout/main_toolbar">
+        </include>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

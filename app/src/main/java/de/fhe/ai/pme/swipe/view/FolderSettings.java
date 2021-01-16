@@ -22,6 +22,9 @@ public class FolderSettings extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
     }
 
+
+    //Jump to each activity
+
     public void ClickMenu(View view){
         //Opens drawer
         MainActivity.openDrawer(drawerLayout);
