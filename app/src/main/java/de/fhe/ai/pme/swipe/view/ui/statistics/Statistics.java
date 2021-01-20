@@ -1,21 +1,23 @@
-package de.fhe.ai.pme.swipe.view;
-
-import android.os.Bundle;
-import android.view.View;
+package de.fhe.ai.pme.swipe.view.ui.statistics;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.os.Bundle;
+import android.view.View;
+
 import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.view.MainActivity;
+import de.fhe.ai.pme.swipe.view.ui.foldersettings.FolderSettings;
 
-public class Folder extends AppCompatActivity {
 
+public class Statistics extends AppCompatActivity {
     DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_folder);
+        setContentView(R.layout.activity_statistics);
         // Assign Variable
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -32,31 +34,19 @@ public class Folder extends AppCompatActivity {
     }
 
     public void ClickFolder(View view){
-        //recreate activity
-        recreate();
+        //Redirect activity to Folder Settings
+        MainActivity.redirectActivity(this,MainActivity.class);
     }
 
-    public void ClickAddButton(View view){
-        //checks if you are in a folder if non folder exists you cant create a card
-        //add folder or add card
-        //Creates a Folder
-        MainActivity.redirectActivity(this,CreateFolderOrCard.class);
-    }
-
-
-//    public void ClickSettings(View view){
-//        //Redirect activity Settings
-//        MainActivity.redirectActivity(this,FolderSettings.class);
-//    }
 
     public void ClickFolderSettings(View view){
         //Redirect activity to Folder Settings
-        MainActivity.redirectActivity(this,FolderSettings.class);
+        MainActivity.redirectActivity(this, FolderSettings.class);
     }
 
     public void ClickStatistics(View view){
-        //Redirect activity to Folder Settings
-        MainActivity.redirectActivity(this,Statistics.class);
+        //recreate activity
+        recreate();
     }
 
     protected void onPause(){
@@ -65,4 +55,4 @@ public class Folder extends AppCompatActivity {
         MainActivity.closeDrawer(drawerLayout);
     }
 
- }
+}

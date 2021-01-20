@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.model.Folder;
+import de.fhe.ai.pme.swipe.view.ui.foldersettings.FolderSettings;
+import de.fhe.ai.pme.swipe.view.ui.statistics.Statistics;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         activity.startActivity(intent);
     }
 
+    //Redirects Fragment !!!!
+
 
 
 
@@ -70,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void ClickFolder(View view){
         //Redirect Activity to Folder tab
-        redirectActivity(this, Folder.class);
+        redirectActivity(this, MainActivity.class);
     }
     public void ClickFolderSettings(View view){
         //Redirect Activity to Settings tab

@@ -11,12 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Swipe">
 
-        <activity android:name=".view.FolderConfiguration" />
-        <activity android:name=".view.CardConfiguration" />
-        <activity android:name=".view.CreateFolderOrCard" />
-        <activity android:name=".view.Statistics" />
-        <activity android:name=".view.FolderSettings" />
-        <activity android:name=".view.Folder" />
+
+        <activity android:name=".view.ui.statistics.Statistics" />
+        <activity android:name=".view.ui.foldersettings.FolderSettings" />
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

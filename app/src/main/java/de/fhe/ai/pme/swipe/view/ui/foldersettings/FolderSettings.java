@@ -1,4 +1,4 @@
-package de.fhe.ai.pme.swipe.view;
+package de.fhe.ai.pme.swipe.view.ui.foldersettings;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -7,20 +7,25 @@ import android.os.Bundle;
 import android.view.View;
 
 import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.view.MainActivity;
+import de.fhe.ai.pme.swipe.view.ui.statistics.Statistics;
 
 
+public class FolderSettings extends AppCompatActivity {
 
-public class Statistics extends AppCompatActivity {
     DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_statistics);
+        setContentView(R.layout.activity_folder_settings);
         // Assign Variable
 
         drawerLayout = findViewById(R.id.drawer_layout);
     }
+
+
+    //Jump to each activity
 
     public void ClickMenu(View view){
         //Opens drawer
@@ -33,23 +38,18 @@ public class Statistics extends AppCompatActivity {
     }
 
     public void ClickFolder(View view){
-        //Redirect activity to Folder Settings
-        MainActivity.redirectActivity(this,Folder.class);
+        //Redirect activity to home
+        MainActivity.redirectActivity(this,MainActivity.class);
     }
 
-//    public void ClickSettings(View view){
-//        //Redirect activity Settings
-//        MainActivity.redirectActivity(this,Settings.class);
-//    }
-
     public void ClickFolderSettings(View view){
-        //Redirect activity to Folder Settings
-        MainActivity.redirectActivity(this,FolderSettings.class);
+        //recreate activity
+        recreate();
     }
 
     public void ClickStatistics(View view){
-        //recreate activity
-        recreate();
+        //Redirect activity to Statistics
+        MainActivity.redirectActivity(this, Statistics.class);
     }
 
     protected void onPause(){

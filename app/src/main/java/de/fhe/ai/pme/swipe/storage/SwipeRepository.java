@@ -1,5 +1,6 @@
 package de.fhe.ai.pme.swipe.storage;
 
+import android.app.Application;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
@@ -25,6 +26,25 @@ public class SwipeRepository {
         SwipeDatabase db = SwipeDatabase.getDatabase( context );
         this.swipeDao = db.swipeDao();
     }
+
+
+    //SWIPE REPOSITORY INSTANCE
+
+    private static SwipeRepository INSTANCE;
+
+    public static SwipeRepository getRepository( Application application )
+    {
+        if( INSTANCE == null ) {
+            synchronized ( SwipeRepository.class ) {
+                if( INSTANCE == null ) {
+                    INSTANCE = new SwipeRepository( application );
+                }
+            }
+        }
+
+        return INSTANCE;
+    }
+
 
     /*
         Query-methods for Database connection
