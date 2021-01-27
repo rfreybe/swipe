@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+    <string name="manualOrder">Manual Order</string>
+    <string name="nameDesc">Name Descending</string>
+    <string name="nameAsc">Name Ascending</string>
+    <string name="colorDesc">Color Descending</string>
+    <string name="colorAsc">Color Ascending</string>
+    <string name="updatedDesc">Updated Descending</string>
+    <string name="updatedAsc">Updated Ascending</string>
+</resources>

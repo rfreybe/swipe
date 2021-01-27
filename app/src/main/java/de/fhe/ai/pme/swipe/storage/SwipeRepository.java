@@ -28,7 +28,7 @@ public class SwipeRepository {
     }
 
 
-    //SWIPE REPOSITORY INSTANCE
+    // Repository Instance
 
     private static SwipeRepository INSTANCE;
 

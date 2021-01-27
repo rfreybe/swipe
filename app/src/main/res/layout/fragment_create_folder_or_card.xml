@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ui.core.CreateFolderOrCard">
+    tools:context=".view.ui.home.configuration.CreateFolderOrCardFragment">
 
     <include
         android:id="@+id/include2"
-        layout="@layout/second_toolbar">
-    </include>
-
+        layout="@layout/second_toolbar" />
 
     <TextView
         android:id="@+id/textView"
@@ -19,7 +17,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:text="Do you want to add a card or a folder?"
+        android:text="@string/text_create_folder_or_card"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -42,19 +40,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Add Card"
+            android:text="@string/text_create_card"
             android:textSize="20sp"
-            tools:ignore="Suspicious0dp">
-
-        </TextView>
+            tools:ignore="Suspicious0dp" />
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_card">
-
-        </ImageView>
+            android:src="@drawable/ic_card" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,17 +71,13 @@
             android:layout_weight="1"
             android:text="Add Folder"
             android:textSize="20sp"
-            tools:ignore="Suspicious0dp">
-
-        </TextView>
+            tools:ignore="Suspicious0dp" />
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_folder">
-
-        </ImageView>
+            android:src="@drawable/ic_folder" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,12 +18,25 @@ public class SwipeApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        SwipeRepository repository = new SwipeRepository(this);
-
-        Faker faker = new Faker();
-
-        repository.insert( new Folder(faker.chuckNorris().fact()));
-        repository.insert( new Folder(faker.chuckNorris().fact(), 1));
+//        SwipeRepository repository = new SwipeRepository(this);
+//
+//        repository.insert( new Folder("OOP"));
+//        repository.insert( new Folder("GKP"));
+//        repository.insert( new Folder("SWT1"));
+//        repository.insert( new Folder("THI"));
+//        repository.insert( new Folder("BVME"));
+//        repository.insert( new Folder("THI2"));
+//        repository.insert( new Folder("MA1"));
+//        repository.insert( new Folder("MA2"));
+//        repository.insert( new Folder("ES1"));
+//        repository.insert( new Folder("ES2"));
+//        repository.insert( new Folder("SWT2"));
+//        repository.insert( new Folder("DB1"));
+//        repository.insert( new Folder("DB2"));
+//        repository.insert( new Folder("ALG"));
+//        repository.insert( new Folder("Graphentheorie"));
+//        repository.insert( new Folder("Java"));
+//        repository.insert( new Folder("Webentwicklung"));
     }
 
     public KeyValueStore getStore() {

@@ -11,27 +11,24 @@
         android:layout_height="120dp"
         android:layout_margin="16dp"
         android:onClick="ClickLogo"
-        android:src="@drawable/ic_statistics">
-    </ImageView>
+        android:src="@drawable/ic_statistics"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Swipe.ME"
+        android:text="@string/app_name"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:textColor="#636363">
-
-    </TextView>
+        android:textColor="#636363"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="#636363">
-    </View>
+        android:background="#636363"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,16 +42,14 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:padding="12dp"
-            android:text="Home"
-            tools:ignore="Suspicious0dp">
-        </TextView>
+            android:text="@string/title_home"
+            tools:ignore="Suspicious0dp"/>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="48dp"
-            android:src="@drawable/ic_folder">
-
-        </ImageView>
+            android:src="@drawable/ic_folder"/>
     </LinearLayout>
 
     <LinearLayout
@@ -70,18 +65,16 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:padding="12dp"
-            android:text="Folder Settings"
-            tools:ignore="Suspicious0dp">
+            android:text="@string/title_settings"
+            tools:ignore="Suspicious0dp"/>
 
-        </TextView>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="48dp"
-            android:src="@drawable/ic_foldersettings">
-
-        </ImageView>
+            android:src="@drawable/ic_settings"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -95,16 +88,14 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:padding="12dp"
-            android:text="Statistics"
-            tools:ignore="Suspicious0dp">
+            android:text="@string/title_statistics"
+            tools:ignore="Suspicious0dp"/>
 
-        </TextView>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="48dp"
-            android:src="@drawable/ic_statistics">
-
-        </ImageView>
+            android:src="@drawable/ic_statistics"/>
     </LinearLayout>
+
 </LinearLayout>

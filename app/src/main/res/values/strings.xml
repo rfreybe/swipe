@@ -1,5 +1,21 @@
 <resources>
-    <string name="app_name">swipe</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Swipe</string>
+    <string name="toolbar_name">SWIPE.ME</string>
+    <string name="title_statistics">Statistics</string>
+    <string name="title_home">Home</string>
+    <string name="title_settings">Settings</string>
+    <string name="text_empty_list">#No Content#</string>
+
+    <!--Create Folder & Card-->
+    <string name="button_save">SAVE</string>
+    <string name="text_create_folder_or_card">Create Folder Or Card</string>
+
+    <string name="text_create_folder">New Folder</string>
+    <string name="hint_folder_name">Folder Name</string>
+    <string name="hint_folder_color">Folder Color</string>
+
+    <string name="text_create_card">New Card</string>
+    <string name="hint_card_name">Card Name</string>
+    <string name="hint_card_question">Question</string>
+    <string name="hint_card_answer">Answer</string>
 </resources>

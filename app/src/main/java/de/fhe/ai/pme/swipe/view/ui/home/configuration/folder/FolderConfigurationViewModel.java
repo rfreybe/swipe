@@ -1,10 +1,4 @@
-package de.fhe.ai.pme.swipe.view.ui.folder;
-
-import android.app.Application;
-
-import de.fhe.ai.pme.swipe.model.Card;
-import de.fhe.ai.pme.swipe.model.Folder;
-import de.fhe.ai.pme.swipe.storage.SwipeRepository;
+package de.fhe.ai.pme.swipe.view.ui.home.configuration.folder;
 
 public class FolderConfigurationViewModel {
 //

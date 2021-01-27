@@ -105,4 +105,9 @@ public class Folder {
     public void setModified(long modified) {
         this.modified = modified;
     }
+
+    public String toString() {
+        return "Folder " + this.getName() + ", with Parent Folder: " + this.getParentFolderID() +
+                ", color: " + this.getColor().toString();
+    }
 }

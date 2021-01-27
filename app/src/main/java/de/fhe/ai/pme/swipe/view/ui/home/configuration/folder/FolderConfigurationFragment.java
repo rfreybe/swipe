@@ -1,28 +1,11 @@
-package de.fhe.ai.pme.swipe.view.ui.folder;
+package de.fhe.ai.pme.swipe.view.ui.home.configuration.folder;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import de.fhe.ai.pme.swipe.R;
-import de.fhe.ai.pme.swipe.model.Card;
-import de.fhe.ai.pme.swipe.model.Folder;
-import de.fhe.ai.pme.swipe.view.ui.card.CardConfigurationViewModel;
-import de.fhe.ai.pme.swipe.view.ui.card.PageConfigurationViewModel;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
 
 
 //opens after you decided for adding a Card
 
-public class FolderConfiguration extends BaseFragment {
+public class FolderConfigurationFragment extends BaseFragment {
 //
 //    private FolderConfigurationViewModel folderConfigurationViewModel;
 //    private EditText foldernameField;
