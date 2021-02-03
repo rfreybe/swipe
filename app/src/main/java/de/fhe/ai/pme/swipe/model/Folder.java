@@ -52,6 +52,7 @@ public class Folder {
         this.parentFolderID = parentFolderID;
         this.name = name;
         this.color = Color.GREY;
+        this.folderID++;
     }
 
     public int getFolderID() {
