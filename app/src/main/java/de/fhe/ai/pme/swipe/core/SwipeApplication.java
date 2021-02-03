@@ -1,7 +1,10 @@
 package de.fhe.ai.pme.swipe.core;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.provider.SyncStateContract;
 
 import com.github.javafaker.Faker;
 
@@ -18,6 +21,9 @@ public class SwipeApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //apply theme
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean darkModeEnabled = sharedPreferences.getBoolean(Constants.PREF_DARK_MODE, false);
         SwipeRepository repository = new SwipeRepository(this);
 
         Faker faker = new Faker();
