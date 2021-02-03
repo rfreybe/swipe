@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -22,7 +23,14 @@ import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
 
 public class FolderFragment extends BaseFragment {
 
+    private FolderViewModel folderViewModel;
     private int currentFolderID;
+
+    //Redirect to CreateFolderOrCard fragment
+    private final View.OnClickListener addFolderOrCardClickListener= v -> {
+
+
+    };
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +40,7 @@ public class FolderFragment extends BaseFragment {
         currentFolderID = 0;
 
         // Create Layout/Views
+        folderViewModel = this.getViewModel(FolderViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Get View Model
@@ -71,8 +80,15 @@ public class FolderFragment extends BaseFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 folderViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
             }
+
         });
 
+        Button AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
+        AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
+
         return root;
+
+
+
     }
 }

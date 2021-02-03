@@ -18,8 +18,8 @@ public class SwipeApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        SwipeRepository repository = new SwipeRepository(this);
-//
+        SwipeRepository repository = new SwipeRepository(this);
+
 //        repository.insert( new Folder("OOP"));
 //        repository.insert( new Folder("GKP"));
 //        repository.insert( new Folder("SWT1"));
@@ -37,14 +37,15 @@ public class SwipeApplication extends Application {
 //        repository.insert( new Folder("Graphentheorie"));
 //        repository.insert( new Folder("Java"));
 //        repository.insert( new Folder("Webentwicklung"));
+        }
+
+        public KeyValueStore getStore () {
+            if (this.store == null) {
+                this.store = new KeyValueStore(this);
+            }
+            return this.store;
+        }
     }
 
-    public KeyValueStore getStore() {
-        if (this.store == null ) {
-            this.store = new KeyValueStore(this);
-        }
-        return this.store;
-    }
-}
 
 
