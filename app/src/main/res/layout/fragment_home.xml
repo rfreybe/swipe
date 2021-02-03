@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.ui.home.FolderFragment">
 
-    <ImageView
+    <Button
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="612dp"

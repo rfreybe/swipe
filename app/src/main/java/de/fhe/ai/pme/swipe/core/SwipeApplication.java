@@ -23,7 +23,7 @@ public class SwipeApplication extends Application {
 
         //apply theme
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean darkModeEnabled = sharedPreferences.getBoolean(Constants.PREF_DARK_MODE, false);
+        //boolean darkModeEnabled = sharedPreferences.getBoolean(Constants.PREF_DARK_MODE, false);
         SwipeRepository repository = new SwipeRepository(this);
 
 //        repository.insert( new Folder("OOP"));
