@@ -8,20 +8,37 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import de.fhe.ai.pme.swipe.R;
-import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
+import android.os.Bundle;
 
-public class SettingsFragment extends BaseFragment {
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceFragmentCompat;
+
+import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.core.Constants;
+
+
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SettingsViewModel settingsViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        settingsViewModel = this.getViewModel(SettingsViewModel.class);
+        findPreference(Constants.PREF_DARK_MODE).setOnPreferenceChangeListener((preference, newValue) -> {
+            AppCompatDelegate.setDefaultNightMode(
+                    (Boolean)newValue ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+            );
 
-        View root = inflater.inflate(R.layout.fragment_settings, container, false);
+            return true;
+        });
 
-        return root;
-    }
+
+
+
 }
+}
+
+
+
+
