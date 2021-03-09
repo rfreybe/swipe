@@ -92,18 +92,6 @@ public abstract class SwipeDatabase extends RoomDatabase {
             super.onCreate(db);
 
             Log.i( LOG_TAG_DB, "onCreate() called" );
-
-            execute(() -> {
-                SwipeDao dao = INSTANCE.swipeDao();
-
-               Faker faker = Faker.instance();
-                for (int i = 0; i < 9; i++)
-                {
-                    Folder folder = new Folder(faker.chuckNorris().fact());
-                    dao.insert(folder);
-                }
-                Log.i(LOG_TAG_DB, "Inserted 10 values to DB");
-            });
         }
     };
 

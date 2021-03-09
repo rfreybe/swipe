@@ -1,5 +1,6 @@
 package de.fhe.ai.pme.swipe.view.ui.home;
 
+import android.content.ClipData;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -14,11 +15,19 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
+import java.util.List;
+
 import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.model.Folder;
+import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
 
 public class FolderFragment extends BaseFragment {
@@ -47,7 +56,7 @@ public class FolderFragment extends BaseFragment {
         FolderViewModel folderViewModel = this.getViewModel(FolderViewModel.class);
 
         // Get RecyclerView Reference
-        RecyclerView folderView = root.findViewById(R.id.recycler_view_folders);
+        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_folders);
 
         // Get FragmentActivity Reference
         FragmentActivity fragmentActivity = this.requireActivity();
@@ -56,12 +65,46 @@ public class FolderFragment extends BaseFragment {
         final FolderAdapter adapter = new FolderAdapter(fragmentActivity);
 
         // Configure RecyclerView with Adapter and LayoutManager
-        folderView.setAdapter( adapter );
-        //folderView.setLayoutManager( new LinearLayoutManager(this.requireActivity() ) );
-        folderView.setLayoutManager( new GridLayoutManager(this.requireActivity(), 2) );
+        recyclerView.setAdapter( adapter );
+        recyclerView.setLayoutManager( new LinearLayoutManager(this.requireActivity() ) );
+        //recyclerView.setLayoutManager( new GridLayoutManager(this.requireActivity(), 2) );
+
+        // Divider Item Decoration to differ between folders
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
+                ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+                Folder fromFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, fromPosition);
+                Folder toFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, toPosition);
+
+                fromFolder.setManualOrderID(toPosition);
+                toFolder.setManualOrderID(fromPosition);
+                folderViewModel.updateFolder(fromFolder);
+                folderViewModel.updateFolder(toFolder);
+
+                adapter.swapFolders(fromPosition, toPosition);
+
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        };
+
+        // Item Touch Helper
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         // Create Spinner Dropdown for Filters
-        Spinner filterDropdown = (Spinner) root.findViewById(R.id.filters_folder);
+        Spinner filterDropdown = root.findViewById(R.id.filters_folder);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this.getContext(),
                 R.array.array_folder_dropdown, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(R.layout.item_dropdown);
@@ -87,8 +130,6 @@ public class FolderFragment extends BaseFragment {
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
         return root;
-
-
 
     }
 }

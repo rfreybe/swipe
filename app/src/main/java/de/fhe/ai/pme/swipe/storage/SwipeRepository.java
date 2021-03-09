@@ -16,6 +16,7 @@ import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.model.Page;
 
+//TODO: Make repetitive functions generic
 public class SwipeRepository {
 
     public static final String LOG_TAG = "SwipeRepository";
@@ -29,7 +30,6 @@ public class SwipeRepository {
 
 
     // Repository Instance
-
     private static SwipeRepository INSTANCE;
 
     public static SwipeRepository getRepository( Application application )
@@ -49,7 +49,7 @@ public class SwipeRepository {
     /*
         Query-methods for Database connection
      */
-    private LiveData<List<Folder>> queryLiveDataFolder(Callable<LiveData<List<Folder>>> query )
+    private <T> LiveData<T> queryLiveData( Callable<LiveData<T>> query )
     {
         try {
             return SwipeDatabase.executeWithReturn( query );
@@ -58,10 +58,10 @@ public class SwipeRepository {
             e.printStackTrace();
         }
 
-        return new MutableLiveData<>(Collections.emptyList());
+        return new MutableLiveData<>();
     }
 
-    private LiveData<List<Card>> queryLiveDataCard(Callable<LiveData<List<Card>>> query )
+    private Folder querySingleFolder(Callable<Folder> query )
     {
         try {
             return SwipeDatabase.executeWithReturn( query );
@@ -70,60 +70,33 @@ public class SwipeRepository {
             e.printStackTrace();
         }
 
-        return new MutableLiveData<>(Collections.emptyList());
-    }
-
-    private LiveData<List<Page>> queryLiveDataPage(Callable<LiveData<List<Page>>> query )
-    {
-        try {
-            return SwipeDatabase.executeWithReturn( query );
-        }
-        catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return new MutableLiveData<>(Collections.emptyList());
+        return new Folder();
     }
 
     /*
         Insert-, Update-methods
      */
     public void update(Folder folder) {
-        folder.setModified( System.currentTimeMillis() );
-
         SwipeDatabase.execute( () -> swipeDao.update( prepareFolderForWriting(folder) ) );
     }
 
     public void update(Card card) {
-        card.setModified( System.currentTimeMillis() );
-
         SwipeDatabase.execute( () -> swipeDao.update( prepareCardForWriting(card) ) );
     }
 
     public void update(Page page) {
-        page.setModified( System.currentTimeMillis() );
-
         SwipeDatabase.execute( () -> swipeDao.update( this.preparePageForWriting(page) ) );
     }
 
     public void insert(Folder folder) {
-        folder.setCreated( System.currentTimeMillis() );
-        folder.setModified( folder.getCreated() );
-
         SwipeDatabase.execute( () -> swipeDao.insert( this.prepareFolderForWriting(folder) ) );
     }
 
     public void insert(Card card) {
-        card.setCreated( System.currentTimeMillis() );
-        card.setModified( card.getCreated() );
-
         SwipeDatabase.execute( () -> swipeDao.insert( this.prepareCardForWriting(card) ) );
     }
 
     public void insert(Page page) {
-        page.setCreated( System.currentTimeMillis() );
-        page.setModified( page.getCreated() );
-
         SwipeDatabase.execute( () -> swipeDao.insert( this.preparePageForWriting(page) ) );
     }
 
@@ -132,7 +105,7 @@ public class SwipeRepository {
         if( folder.getCreated() < 0 )
             folder.setCreated( System.currentTimeMillis() );
 
-        folder.setModified( folder.getCreated() );
+        folder.setModified( System.currentTimeMillis() );
 
         return folder;
     }
@@ -142,7 +115,7 @@ public class SwipeRepository {
         if( card.getCreated() < 0 )
             card.setCreated( System.currentTimeMillis() );
 
-        card.setModified( card.getCreated() );
+        card.setModified( System.currentTimeMillis() );
 
         return card;
     }
@@ -152,7 +125,7 @@ public class SwipeRepository {
         if( page.getCreated() < 0 )
             page.setCreated( System.currentTimeMillis() );
 
-        page.setModified( page.getCreated() );
+        page.setModified( System.currentTimeMillis() );
 
         return page;
     }
@@ -161,39 +134,49 @@ public class SwipeRepository {
     /*
         Folder-methods
      */
+    public Folder getFirstFolder()
+    {
+        return this.querySingleFolder( () -> this.swipeDao.getFirstFolder());
+    }
+
+    public Folder getSingleFolderByUserOrder(int parentFolderID, int manualOrderID)
+    {
+        return this.querySingleFolder( () -> this.swipeDao.getSingleFolderByUserOrder(parentFolderID, manualOrderID));
+    }
+
     public LiveData<List<Folder>> getFoldersByUserOrder(int parentFolderID)
     {
-        return this.queryLiveDataFolder( () -> this.swipeDao.getFoldersByUserOrder(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getFoldersByUserOrder(parentFolderID) );
     }
 
     public LiveData<List<Folder>> getFoldersByNameAsc(int parentFolderID)
     {
-        return this.queryLiveDataFolder( () -> this.swipeDao.getFoldersByNameAsc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getFoldersByNameAsc(parentFolderID) );
     }
 
     public LiveData<List<Folder>> getFoldersByNameDesc(int parentFolderID)
     {
-        return this.queryLiveDataFolder( () -> this.swipeDao.getFoldersByNameDesc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getFoldersByNameDesc(parentFolderID) );
     }
 
     public LiveData<List<Folder>> getFoldersByUpdateAsc(int parentFolderID)
     {
-        return this.queryLiveDataFolder( () -> this.swipeDao.getFoldersByUpdateAsc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getFoldersByUpdateAsc(parentFolderID) );
     }
 
     public LiveData<List<Folder>> getFoldersByUpdateDesc(int parentFolderID)
     {
-        return this.queryLiveDataFolder( () -> this.swipeDao.getFoldersByUpdateDesc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getFoldersByUpdateDesc(parentFolderID) );
     }
 
     public LiveData<List<Folder>> getFoldersByColorAsc(int parentFolderID)
     {
-        return this.queryLiveDataFolder( () -> this.swipeDao.getFoldersByColorAsc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getFoldersByColorAsc(parentFolderID) );
     }
 
     public LiveData<List<Folder>> getFoldersByColorDesc(int parentFolderID)
     {
-        return this.queryLiveDataFolder( () -> this.swipeDao.getFoldersByColorDesc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getFoldersByColorDesc(parentFolderID) );
     }
 
     /*
@@ -201,17 +184,17 @@ public class SwipeRepository {
      */
     public LiveData<List<Card>> getCardsByUserOrder(int parentFolderID)
     {
-        return this.queryLiveDataCard( () -> this.swipeDao.getCardsByUserOrder(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getCardsByUserOrder(parentFolderID) );
     }
 
     public LiveData<List<Card>> getCardsByUpdateAsc(int parentFolderID)
     {
-        return this.queryLiveDataCard( () -> this.swipeDao.getCardsByUpdateAsc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getCardsByUpdateAsc(parentFolderID) );
     }
 
     public LiveData<List<Card>> getCardsByUpdateDesc(int parentFolderID)
     {
-        return this.queryLiveDataCard( () -> this.swipeDao.getCardsByUpdateDesc(parentFolderID) );
+        return this.queryLiveData( () -> this.swipeDao.getCardsByUpdateDesc(parentFolderID) );
     }
 
 //    public List<Card> shuffleCards(int parentFolderID)
@@ -226,10 +209,10 @@ public class SwipeRepository {
         Page-methods
      */
     public LiveData<List<Page>> getFrontPage(int cardID) {
-        return this.queryLiveDataPage( () -> this.swipeDao.getFrontPage(cardID));
+        return this.queryLiveData( () -> this.swipeDao.getFrontPage(cardID));
     }
 
     public LiveData<List<Page>> getBackPage(int cardID) {
-        return this.queryLiveDataPage( () -> this.swipeDao.getBackPage(cardID));
+        return this.queryLiveData( () -> this.swipeDao.getBackPage(cardID));
     }
 }

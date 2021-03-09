@@ -50,9 +50,10 @@ public interface SwipeDao {
     @Delete
     void delete(Page... page);
 
-    /*
-        Select-statements for Folder
-     */
+    @Query("SELECT * FROM Folder ORDER BY manualOrderID")
+    Folder getFirstFolder();
+
+    // TODO: Delete all following folders not just one level under deleted folder
     @Query("DELETE FROM Folder WHERE folderID LIKE :folderID OR parentFolderID LIKE :folderID")
     void deleteFolder(int folderID);
 
@@ -61,6 +62,9 @@ public interface SwipeDao {
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     LiveData<List<Folder>> getFoldersByUserOrder(int folderID);
+
+    @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID AND manualOrderID LIKE :manualOrderID")
+    Folder getSingleFolderByUserOrder(int folderID, int manualOrderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY name ASC")
     LiveData<List<Folder>> getFoldersByNameAsc(int folderID);

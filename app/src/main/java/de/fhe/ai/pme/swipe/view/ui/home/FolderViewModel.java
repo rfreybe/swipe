@@ -39,4 +39,14 @@ public class FolderViewModel extends AndroidViewModel {
                 return this.swipeRepository.getFoldersByUpdateDesc(parentFolderID);
         }
     }
+
+    // Methods for Drag & Drop function
+    public Folder getSingleFolderByManualOrder(int parentFolderID, int manualOrderID)
+    {
+        return this.swipeRepository.getSingleFolderByUserOrder(parentFolderID, manualOrderID);
+    }
+
+    public void updateFolder(Folder folder) {
+        this.swipeRepository.update(folder);
+    }
 }

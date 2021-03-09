@@ -14,6 +14,7 @@ import java.util.List;
 
 import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Folder;
+import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
 
@@ -30,11 +31,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     }
 
     private final LayoutInflater inflater;
-
     private List<Folder> folderList;
+    private SwipeRepository repository;
 
     public FolderAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
+        this.repository = new SwipeRepository(context);
     }
 
     @NonNull
@@ -50,6 +52,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         if (this.folderList != null && !this.folderList.isEmpty()) {
             Folder current = this.folderList.get(position);
 
+            // Set Name and Image Resource
             holder.folderName.setText(current.getName());
             holder.folderImage.setImageResource(R.drawable.ic_folder);
         }
@@ -69,6 +72,15 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
 
     public void setFolders(List<Folder> folders){
         this.folderList = folders;
+        notifyDataSetChanged();
+    }
+
+    public void swapFolders(int fromPosition, int toPosition) {
+        Folder fromFolder = this.folderList.get(fromPosition);
+        Folder toFolder = this.folderList.get(toPosition);
+
+        this.folderList.set(fromPosition, toFolder);
+        this.folderList.set(toPosition, fromFolder);
         notifyDataSetChanged();
     }
 

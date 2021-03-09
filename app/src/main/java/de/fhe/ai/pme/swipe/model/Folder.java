@@ -40,15 +40,17 @@ public class Folder {
     @ColumnInfo(name = "modified")
     private long modified;
 
-    @Ignore
+    public Folder() {}
+
     public Folder(@NonNull String name){
-        this.manualOrderID = this.folderID;
+        this.parentFolderID = 0;
+        this.manualOrderID = 0;
         this.name = name;
         this.color = Color.GREY;
     }
 
     public Folder(@NonNull String name, int parentFolderID){
-        this.manualOrderID = this.folderID;
+        this.manualOrderID = 0;
         this.parentFolderID = parentFolderID;
         this.name = name;
         this.color = Color.GREY;
@@ -108,7 +110,7 @@ public class Folder {
     }
 
     public String toString() {
-        return "Folder " + this.getName() + ", with Parent Folder: " + this.getParentFolderID() +
+        return "Folder " + this.getName() + ", with ParentFolderID: " + this.getParentFolderID() +
                 ", color: " + this.getColor().toString();
     }
 }
