@@ -14,7 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -29,6 +31,7 @@ import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
+import de.fhe.ai.pme.swipe.view.ui.home.configuration.FolderOrCardFragment;
 
 public class FolderFragment extends BaseFragment {
 
@@ -38,11 +41,23 @@ public class FolderFragment extends BaseFragment {
     //Redirect to CreateFolderOrCard fragment
     private final View.OnClickListener addFolderOrCardClickListener= v -> {
 
-
     };
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        Button newGameButton = (Button) view.findViewById(R.id.btn_add_folder_or_card);
+        newGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swapFragment();
+
+            }
+        });
+
 
         // TODO: relate parentFolderID to currently selected Folder
         /* Temporary */
@@ -97,6 +112,7 @@ public class FolderFragment extends BaseFragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             }
+
         };
 
         // Item Touch Helper
@@ -129,7 +145,16 @@ public class FolderFragment extends BaseFragment {
         Button AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
-        return root;
+        return view; // root muss auch noch returnt werden
+
+    }
+
+    private void swapFragment() {
+        FolderOrCardFragment folderOrCardFragment = new FolderOrCardFragment();
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment, folderOrCardFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
     }
 }
