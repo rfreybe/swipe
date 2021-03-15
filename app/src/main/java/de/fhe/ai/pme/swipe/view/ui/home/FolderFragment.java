@@ -47,17 +47,6 @@ public class FolderFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        Button newGameButton = (Button) view.findViewById(R.id.btn_add_folder_or_card);
-        newGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                swapFragment();
-
-            }
-        });
-
 
         // TODO: relate parentFolderID to currently selected Folder
         /* Temporary */
@@ -145,7 +134,16 @@ public class FolderFragment extends BaseFragment {
         Button AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
-        return view; // root muss auch noch returnt werden
+        Button newGameButton = (Button) root.findViewById(R.id.btn_add_folder_or_card);
+        newGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swapFragment();
+            }
+        });
+
+
+        return root;
 
     }
 
