@@ -43,8 +43,8 @@ public class Folder {
     public Folder() {}
 
     public Folder(@NonNull String name){
-        this.parentFolderID = 0;
         this.manualOrderID = 0;
+        this.parentFolderID = 0;
         this.name = name;
         this.color = Color.GREY;
     }
@@ -54,7 +54,6 @@ public class Folder {
         this.parentFolderID = parentFolderID;
         this.name = name;
         this.color = Color.GREY;
-        this.folderID++;
     }
 
     public int getFolderID() {

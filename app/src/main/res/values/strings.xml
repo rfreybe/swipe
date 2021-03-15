@@ -4,6 +4,9 @@
     <string name="title_statistics">Statistics</string>
     <string name="title_home">Home</string>
     <string name="title_settings">Settings</string>
+    <string name="title_create_folder_or_card">Choose Folder Or Card</string>
+    <string name="title_folder_configuration">Create New Folder</string>
+    <string name="title_card_configuration">Create New Card</string>
     <string name="text_empty_list">#No Content#</string>
 
     <!--Create Folder & Card-->

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.mutable.Mutable;
 
 import java.security.Key;
 import java.util.Collections;
+import java.util.List;
 
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.storage.KeyValueStore;
@@ -24,14 +25,22 @@ public class SwipeApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //apply theme
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean darkModeEnabled = sharedPreferences.getBoolean(Constants.PREF_DARK_MODE, false);
         this.repository = new SwipeRepository(this);
 
-        // TODO: Temporary
-        if(this.repository.getFirstFolder() == null) {
+        //TODO: Temporary
+        /* Set this True to reset Test Data */
+        boolean resetTestData = true;
+
+//        if(resetTestData) {
+//            if(this.repository.getFirstFolder(0) != null) {
+//                List<Folder> folderList = this.repository.getFolders(0);
+//                for(Folder f : folderList) {
+//                    this.repository.delete(f);
+//                }
+//            }
+//        }
+
+        if(this.repository.getFirstFolder(0) == null) {
             Folder OOP = new Folder("OOP");
             OOP.setManualOrderID(0);
             Folder GKP = new Folder("GKP");
@@ -63,7 +72,28 @@ public class SwipeApplication extends Application {
             repository.insert( MA2 );
             repository.insert( ES1 );
             repository.insert( ES2 );
+
+            Folder Unterordner1;
+            Folder Unterordner2;
+            Folder Unterordner3;
+
+            for (int i = 1; i < 11; i++) {
+                Unterordner1 = new Folder("Unterordner1", i);
+                Unterordner1.setManualOrderID(0);
+                Unterordner2 = new Folder("Unterordner2", i);
+                Unterordner2.setManualOrderID(1);
+                Unterordner3 = new Folder("Unterordner3", i);
+                Unterordner3.setManualOrderID(2);
+
+                repository.insert(Unterordner1);
+                repository.insert(Unterordner2);
+                repository.insert(Unterordner3);
+            }
         }
+
+        // Apply theme
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean darkModeEnabled = sharedPreferences.getBoolean(Constants.PREF_DARK_MODE, false);
     }
 
     public KeyValueStore getStore () {

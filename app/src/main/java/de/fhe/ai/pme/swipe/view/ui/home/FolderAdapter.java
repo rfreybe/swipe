@@ -15,11 +15,12 @@ import java.util.List;
 import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
+import de.fhe.ai.pme.swipe.view.ui.core.RecyclerViewClickListener;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
 
     // View Holder definition
-    static class FolderViewHolder extends RecyclerView.ViewHolder {
+    public static class FolderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final TextView folderName;
         private final ImageView folderImage;
 
@@ -27,16 +28,24 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             super(itemView);
             this.folderName = itemView.findViewById(R.id.item_folder_name);
             this.folderImage = itemView.findViewById(R.id.item_folder_image);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemListener.folderClick(v, this.getAdapterPosition());
         }
     }
 
     private final LayoutInflater inflater;
     private List<Folder> folderList;
-    private SwipeRepository repository;
+    private static SwipeRepository repository;
+    private static RecyclerViewClickListener itemListener;
 
-    public FolderAdapter(Context context) {
+    public FolderAdapter(Context context, RecyclerViewClickListener itemListener) {
         this.inflater = LayoutInflater.from(context);
         this.repository = new SwipeRepository(context);
+        this.itemListener = itemListener;
     }
 
     @NonNull
@@ -81,7 +90,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
 
         this.folderList.set(fromPosition, toFolder);
         this.folderList.set(toPosition, fromFolder);
-        notifyDataSetChanged();
     }
 
 }

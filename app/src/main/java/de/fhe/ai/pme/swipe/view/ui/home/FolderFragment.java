@@ -12,10 +12,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -29,23 +32,29 @@ import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
+import de.fhe.ai.pme.swipe.view.ui.core.RecyclerViewClickListener;
 
 public class FolderFragment extends BaseFragment {
 
     private FolderViewModel folderViewModel;
-    private int currentFolderID;
+    private FolderAdapter adapter;
+    private Spinner filterDropdown;
+    private static int currentFolderID;
 
-    //Redirect to CreateFolderOrCard fragment
-    private final View.OnClickListener addFolderOrCardClickListener= v -> {
-
-
+    //TODO: Bug - Sometimes shuffles Folders randomly when swapping them
+    // Only after trying to Drag and Drop with other filter then manual order
+    RecyclerViewClickListener itemListener = new RecyclerViewClickListener() {
+        @Override
+        public void folderClick(View v, int position) {
+            Folder clickedFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, position);
+            currentFolderID = clickedFolder.getFolderID();
+            folderViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
+        }
     };
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        // TODO: relate parentFolderID to currently selected Folder
-        /* Temporary */
         currentFolderID = 0;
 
         // Create Layout/Views
@@ -57,54 +66,23 @@ public class FolderFragment extends BaseFragment {
 
         // Get RecyclerView Reference
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_folders);
+        // Divider Item Decoration to differ between folders
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         // Get FragmentActivity Reference
         FragmentActivity fragmentActivity = this.requireActivity();
 
         // Create Adapter
-        final FolderAdapter adapter = new FolderAdapter(fragmentActivity);
+        adapter = new FolderAdapter(fragmentActivity, itemListener);
 
         // Configure RecyclerView with Adapter and LayoutManager
         recyclerView.setAdapter( adapter );
         recyclerView.setLayoutManager( new LinearLayoutManager(this.requireActivity() ) );
         //recyclerView.setLayoutManager( new GridLayoutManager(this.requireActivity(), 2) );
 
-        // Divider Item Decoration to differ between folders
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
-                ItemTouchHelper.START | ItemTouchHelper.END, 0) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
-                int fromPosition = viewHolder.getAdapterPosition();
-                int toPosition = target.getAdapterPosition();
-                Folder fromFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, fromPosition);
-                Folder toFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, toPosition);
-
-                fromFolder.setManualOrderID(toPosition);
-                toFolder.setManualOrderID(fromPosition);
-                folderViewModel.updateFolder(fromFolder);
-                folderViewModel.updateFolder(toFolder);
-
-                adapter.swapFolders(fromPosition, toPosition);
-
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
-        };
-
-        // Item Touch Helper
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
         // Create Spinner Dropdown for Filters
-        Spinner filterDropdown = root.findViewById(R.id.filters_folder);
+        filterDropdown = root.findViewById(R.id.filters_folder);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this.getContext(),
                 R.array.array_folder_dropdown, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(R.layout.item_dropdown);
@@ -126,10 +104,66 @@ public class FolderFragment extends BaseFragment {
 
         });
 
+        // Configure Item Touch Helper for Drag & Drop Function
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
+                ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+
+            //TODO: Quick and Dirty Fix for shuffling Bug. OnMove is called 2 times each Drag???
+            int lastFromPosition = 0;
+            int lastToPosition = 0;
+            @Override
+            //TODO: Make manualOrderID related to parentFolderID -> unique manualOrder inside every Folder
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                if (!filterDropdown.getSelectedItem().equals("Manual Order")) {
+                    Toast.makeText(getContext(), "Manuelle Reihenfolge für Drag & Drop auswählen!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    int fromPosition = viewHolder.getAdapterPosition();
+                    int toPosition = target.getAdapterPosition();
+                    if(lastFromPosition != fromPosition || lastToPosition != toPosition) {
+                        Folder fromFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, fromPosition);
+                        Folder toFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, toPosition);
+
+                        fromFolder.setManualOrderID(toPosition);
+                        toFolder.setManualOrderID(fromPosition);
+                        folderViewModel.updateFolder(fromFolder);
+                        folderViewModel.updateFolder(toFolder);
+
+                        adapter.swapFolders(fromPosition, toPosition);
+                        folderViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+
+                        lastFromPosition = fromPosition;
+                        lastToPosition = toPosition;
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        };
+
+        // Item Touch Helper
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
         Button AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
         return root;
 
     }
+
+    //Redirect to CreateFolderOrCard Fragment
+    private final View.OnClickListener addFolderOrCardClickListener= v -> {
+
+        NavController navController = Navigation.findNavController(this.getActivity(), R.id.nav_host_fragment);
+
+        navController.navigate(R.id.navigation_create_folder_or_card);
+
+    };
 }

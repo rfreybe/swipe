@@ -12,10 +12,14 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.view.ui.home.FolderFragment;
+import de.fhe.ai.pme.swipe.view.ui.home.configuration.FolderOrCardFragment;
 
 /*
     Common super class for all our Fragments. Offers some regularly needed
@@ -28,6 +32,7 @@ public class BaseFragment extends Fragment {
         access to the context requires some effort. This method hides all the
         complex stuff.
      */
+
     protected <T extends ViewModel> T getViewModel(Class<T> tClass) {
         return new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(

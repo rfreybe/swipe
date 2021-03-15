@@ -22,4 +22,22 @@
         android:name="de.fhe.ai.pme.swipe.view.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_create_folder_or_card"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.CreateFolderOrCardFragment"
+        android:label="@string/title_create_folder_or_card"
+        tools:layout="@layout/fragment_create_folder_or_card" />
+
+    <fragment
+        android:id="@+id/navigation_folder_configuration"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.folder.FolderConfigurationFragment"
+        android:label="@string/title_folder_configuration"
+        tools:layout="@layout/fragment_folder_configuration" />
+
+    <fragment
+        android:id="@+id/navigation_card_configuration"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.card.CardConfigurationFragment"
+        android:label="@string/title_card_configuration"
+        tools:layout="@layout/fragment_card_configuration" />
 </navigation>

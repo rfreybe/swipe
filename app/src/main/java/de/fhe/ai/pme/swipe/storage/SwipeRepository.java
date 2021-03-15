@@ -3,12 +3,17 @@ package de.fhe.ai.pme.swipe.storage;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
@@ -73,6 +78,139 @@ public class SwipeRepository {
         return new Folder();
     }
 
+    private List<Folder> queryFolders(Callable<List<Folder>> query )
+    {
+        try {
+            return SwipeDatabase.executeWithReturn( query );
+        }
+        catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new List<Folder>() {
+            @Override
+            public int size() {
+                return 0;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public boolean contains(@Nullable Object o) {
+                return false;
+            }
+
+            @NonNull
+            @Override
+            public Iterator<Folder> iterator() {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Object[] toArray() {
+                return new Object[0];
+            }
+
+            @NonNull
+            @Override
+            public <T> T[] toArray(@NonNull T[] a) {
+                return null;
+            }
+
+            @Override
+            public boolean add(Folder folder) {
+                return false;
+            }
+
+            @Override
+            public boolean remove(@Nullable Object o) {
+                return false;
+            }
+
+            @Override
+            public boolean containsAll(@NonNull Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(@NonNull Collection<? extends Folder> c) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(int index, @NonNull Collection<? extends Folder> c) {
+                return false;
+            }
+
+            @Override
+            public boolean removeAll(@NonNull Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean retainAll(@NonNull Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public void clear() {
+
+            }
+
+            @Override
+            public Folder get(int index) {
+                return null;
+            }
+
+            @Override
+            public Folder set(int index, Folder element) {
+                return null;
+            }
+
+            @Override
+            public void add(int index, Folder element) {
+
+            }
+
+            @Override
+            public Folder remove(int index) {
+                return null;
+            }
+
+            @Override
+            public int indexOf(@Nullable Object o) {
+                return 0;
+            }
+
+            @Override
+            public int lastIndexOf(@Nullable Object o) {
+                return 0;
+            }
+
+            @NonNull
+            @Override
+            public ListIterator<Folder> listIterator() {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public ListIterator<Folder> listIterator(int index) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public List<Folder> subList(int fromIndex, int toIndex) {
+                return null;
+            }
+        };
+    }
+
     /*
         Insert-, Update-methods
      */
@@ -98,6 +236,16 @@ public class SwipeRepository {
 
     public void insert(Page page) {
         SwipeDatabase.execute( () -> swipeDao.insert( this.preparePageForWriting(page) ) );
+    }
+
+    public void delete(Folder folder) {
+        int folderID = folder.getFolderID();
+        if(swipeDao.getFirstFolder(folderID) != null) {
+            List<Folder> folders = swipeDao.getFoldersByUserOrder(folderID).getValue();
+            for(Folder f : folders) {
+                swipeDao.delete(f);
+            }
+        }
     }
 
     private Folder prepareFolderForWriting( Folder folder ) {
@@ -134,14 +282,19 @@ public class SwipeRepository {
     /*
         Folder-methods
      */
-    public Folder getFirstFolder()
+    public Folder getFirstFolder(int folderID)
     {
-        return this.querySingleFolder( () -> this.swipeDao.getFirstFolder());
+        return this.querySingleFolder( () -> this.swipeDao.getFirstFolder(folderID));
     }
 
-    public Folder getSingleFolderByUserOrder(int parentFolderID, int manualOrderID)
+    public List<Folder> getFolders(int folderID)
     {
-        return this.querySingleFolder( () -> this.swipeDao.getSingleFolderByUserOrder(parentFolderID, manualOrderID));
+        return this.queryFolders( () -> this.swipeDao.getFolders(folderID));
+    }
+
+    public Folder getFirstFolderByUserOrder(int parentFolderID, int manualOrderID)
+    {
+        return this.querySingleFolder( () -> this.swipeDao.getFirstFolderByUserOrder(parentFolderID, manualOrderID));
     }
 
     public LiveData<List<Folder>> getFoldersByUserOrder(int parentFolderID)
