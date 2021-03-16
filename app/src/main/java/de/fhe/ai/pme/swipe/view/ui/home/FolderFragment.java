@@ -151,7 +151,7 @@ public class FolderFragment extends BaseFragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        Button AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
+        ImageView AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
         return root;

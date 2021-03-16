@@ -2,15 +2,9 @@ package de.fhe.ai.pme.swipe.view.ui.core;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,8 +12,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import de.fhe.ai.pme.swipe.R;
-import de.fhe.ai.pme.swipe.view.ui.home.FolderFragment;
-import de.fhe.ai.pme.swipe.view.ui.home.configuration.FolderOrCardFragment;
 
 /*
     Common super class for all our Fragments. Offers some regularly needed
@@ -46,6 +38,18 @@ public class BaseFragment extends Fragment {
     public void hideKeyboard(Context context, View view) {
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+
+    protected void swapFragment(Fragment fragment) {
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.constraint_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 }
 

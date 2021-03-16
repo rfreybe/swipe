@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Card;
@@ -61,20 +63,26 @@ public class CardConfigurationFragment extends BaseFragment {
 
         //ASSIGN BUTTON THE FUNCTION
         Button saveBtn = root.findViewById(R.id.btn_save_card);
-        saveBtn.setOnClickListener(this.saveButtonClickListener);
+        saveBtn.setOnClickListener(this.saveButton);
 
         return root;
     }
 
     public void ClickAddFile(View view){
 
-
     }
 
     public void ClickSubmitChanges(View view){
 
-
     }
+    // Redirect to CreateFolderOrCard Fragment
+    private final View.OnClickListener saveButton= v -> {
+
+        NavController navController = Navigation.findNavController(this.getActivity(), R.id.nav_host_fragment);
+
+        navController.navigate(R.id.navigation_create_folder_or_card);
+
+    };
 
 
 }
