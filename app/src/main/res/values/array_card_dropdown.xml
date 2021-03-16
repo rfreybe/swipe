@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_card_dropdown">
+        <item>@string/manualOrder</item>
+        <item>@string/nameAsc</item>
+        <item>@string/nameDesc</item>
+        <item>@string/updatedAsc</item>
+        <item>@string/updatedDesc</item>
+    </string-array>
+</resources>

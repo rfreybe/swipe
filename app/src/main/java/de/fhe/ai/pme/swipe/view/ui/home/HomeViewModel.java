@@ -7,14 +7,15 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 
-public class FolderViewModel extends AndroidViewModel {
+public class HomeViewModel extends AndroidViewModel {
 
     private final SwipeRepository swipeRepository;
 
-    public FolderViewModel(Application application) {
+    public HomeViewModel(Application application) {
         super(application);
         this.swipeRepository = SwipeRepository.getRepository(application);
     }
@@ -40,13 +41,43 @@ public class FolderViewModel extends AndroidViewModel {
         }
     }
 
+    public LiveData<List<Card>> getCards(int parentFolderID, int filter)
+    {
+        switch(filter){
+            default:
+                return this.swipeRepository.getCardsByUserOrder(parentFolderID);
+            case 1:
+                return this.swipeRepository.getCardsByNameAsc(parentFolderID);
+            case 2:
+                return this.swipeRepository.getCardsByNameDesc(parentFolderID);
+            case 3:
+                return this.swipeRepository.getCardsByUpdateAsc(parentFolderID);
+            case 4:
+                return this.swipeRepository.getCardsByUpdateDesc(parentFolderID);
+        }
+    }
+
     // Methods for Drag & Drop function
     public Folder getSingleFolderByManualOrder(int parentFolderID, int manualOrderID)
     {
         return this.swipeRepository.getFirstFolderByUserOrder(parentFolderID, manualOrderID);
     }
 
+    public Card getSingleCardByManualOrder(int parentFolderID, int manualOrderID)
+    {
+        return this.swipeRepository.getFirstCardByUserOrder(parentFolderID, manualOrderID);
+    }
+
+
+    public Folder getFolderWithID(int folderID) {
+        return this.swipeRepository.getFolderWithID(folderID);
+    }
+
     public void updateFolder(Folder folder) {
         this.swipeRepository.update(folder);
+    }
+
+    public void updateCard(Card card) {
+        this.swipeRepository.update(card);
     }
 }

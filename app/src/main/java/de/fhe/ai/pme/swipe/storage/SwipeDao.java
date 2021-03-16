@@ -57,14 +57,14 @@ public interface SwipeDao {
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     Folder getFirstFolder(int folderID);
 
-    @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
-    List<Folder> getFolders(int folderID);
-
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID AND manualOrderID LIKE :manualOrderID")
     Folder getFirstFolderByUserOrder(int folderID, int manualOrderID);
 
-    @Query("SELECT count(*) FROM Folder")
-    int count();
+    @Query("SELECT * FROM Folder WHERE folderID LIKE :folderID ORDER BY manualOrderID")
+    Folder getFolderWithID(int folderID);
+
+    @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
+    List<Folder> getFolders(int folderID);
 
     /* Filter Methods Folder */
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
@@ -89,10 +89,22 @@ public interface SwipeDao {
     LiveData<List<Folder>> getFoldersByColorDesc(int folderID);
 
     /*
+        Function Methods Card
+    */
+    @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID AND manualOrderID LIKE :manualOrderID")
+    Card getFirstCardByUserOrder(int folderID, int manualOrderID);
+
+     /*
         Select-statements for Card
      */
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     LiveData<List<Card>> getCardsByUserOrder(int folderID);
+
+    @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY name ASC")
+    LiveData<List<Card>> getCardsByNameAsc(int folderID);
+
+    @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY name DESC")
+    LiveData<List<Card>> getCardsByNameDesc(int folderID);
 
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY modified ASC")
     LiveData<List<Card>> getCardsByUpdateAsc(int folderID);

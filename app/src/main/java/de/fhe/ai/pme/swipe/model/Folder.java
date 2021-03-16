@@ -8,7 +8,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Folder {
+public class Folder extends Item{
     public enum Color {
         GREY, BLUE, RED, GREEN, ORANGE, YELLOW
     }
@@ -22,16 +22,15 @@ public class Folder {
     private int manualOrderID;
 
     @NonNull
-    @ColumnInfo(name = "name")
-    private String name;
-
-    @NonNull
     @ColumnInfo(name = "color")
     private Color color;
 
     @ForeignKey(entity = Folder.class, parentColumns = "parentFolderID", childColumns = "folderID")
     @ColumnInfo(name = "parentFolderID")
     private int parentFolderID;
+    
+    @ColumnInfo(name = "containsCards")
+    private boolean containsCards;
 
     @NonNull
     @ColumnInfo(name = "created")
@@ -47,6 +46,7 @@ public class Folder {
         this.parentFolderID = 0;
         this.name = name;
         this.color = Color.GREY;
+        this.containsCards = false;
     }
 
     public Folder(@NonNull String name, int parentFolderID){
@@ -54,6 +54,7 @@ public class Folder {
         this.parentFolderID = parentFolderID;
         this.name = name;
         this.color = Color.GREY;
+        this.containsCards = false;
     }
 
     public int getFolderID() {
@@ -93,6 +94,10 @@ public class Folder {
     public void setParentFolderID(int parentFolderID) {
         this.parentFolderID = parentFolderID;
     }
+    
+    public void setContainsCards(boolean containsCards) { this.containsCards = containsCards; }
+
+    public boolean getContainsCards() { return containsCards; }
 
     public long getCreated() {
         return created;
