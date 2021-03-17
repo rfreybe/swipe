@@ -7,24 +7,19 @@
     android:id="@+id/folder_configuration"
     tools:context="de.fhe.ai.pme.swipe.view.ui.home.configuration.folder.FolderConfigurationFragment">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/second_toolbar"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:text="@string/text_create_folder"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/et_name_of_folder"

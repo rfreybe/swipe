@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 
-public class CardConfigurationViewModel extends AndroidViewModel {
+public class  CardConfigurationViewModel extends AndroidViewModel {
 
     private final SwipeRepository swipeRepository;
 
