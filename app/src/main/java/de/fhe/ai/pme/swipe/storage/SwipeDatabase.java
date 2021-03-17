@@ -29,7 +29,7 @@ import de.fhe.ai.pme.swipe.model.Page;
     List of classes represent entities (-> models)
     !Changes in the database must result in a higher version number!
  */
-@Database( entities = {Folder.class, Card.class, Page.class}, version = 1)
+@Database( entities = {Folder.class, Card.class, Page.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class SwipeDatabase extends RoomDatabase {
 

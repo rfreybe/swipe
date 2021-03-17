@@ -78,6 +78,18 @@ public class SwipeRepository {
         return new Folder();
     }
 
+    private Card querySingleCard(Callable<Card> query )
+    {
+        try {
+            return SwipeDatabase.executeWithReturn( query );
+        }
+        catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new Card();
+    }
+
     private List<Folder> queryFolders(Callable<List<Folder>> query )
     {
         try {
@@ -287,15 +299,20 @@ public class SwipeRepository {
         return this.querySingleFolder( () -> this.swipeDao.getFirstFolder(folderID));
     }
 
+    public Folder getFirstFolderByUserOrder(int parentFolderID, int manualOrderID)
+    {
+        return this.querySingleFolder( () -> this.swipeDao.getFirstFolderByUserOrder(parentFolderID, manualOrderID));
+    }
+
+    public Folder getFolderWithID(int folderID) {
+        return this.querySingleFolder( () -> this.swipeDao.getFolderWithID(folderID));
+    }
+
     public List<Folder> getFolders(int folderID)
     {
         return this.queryFolders( () -> this.swipeDao.getFolders(folderID));
     }
 
-    public Folder getFirstFolderByUserOrder(int parentFolderID, int manualOrderID)
-    {
-        return this.querySingleFolder( () -> this.swipeDao.getFirstFolderByUserOrder(parentFolderID, manualOrderID));
-    }
 
     public LiveData<List<Folder>> getFoldersByUserOrder(int parentFolderID)
     {
@@ -335,14 +352,29 @@ public class SwipeRepository {
     /*
         Card-methods
      */
+    public Card getFirstCardByUserOrder(int parentFolderID, int manualOrderID)
+    {
+        return this.querySingleCard( () -> this.swipeDao.getFirstCardByUserOrder(parentFolderID, manualOrderID));
+    }
+
     public LiveData<List<Card>> getCardsByUserOrder(int parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getCardsByUserOrder(parentFolderID) );
     }
 
-    public LiveData<List<Card>> getCardsByUpdateAsc(int parentFolderID)
+    public LiveData<List<Card>> getCardsByNameAsc(int parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getCardsByUpdateAsc(parentFolderID) );
+    }
+
+    public LiveData<List<Card>> getCardsByNameDesc(int parentFolderID)
+    {
+        return this.queryLiveData( () -> this.swipeDao.getCardsByNameDesc(parentFolderID) );
+    }
+
+    public LiveData<List<Card>> getCardsByUpdateAsc(int parentFolderID)
+    {
+        return this.queryLiveData( () -> this.swipeDao.getCardsByNameAsc(parentFolderID) );
     }
 
     public LiveData<List<Card>> getCardsByUpdateDesc(int parentFolderID)

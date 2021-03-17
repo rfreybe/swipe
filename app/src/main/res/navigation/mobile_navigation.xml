@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="de.fhe.ai.pme.swipe.view.ui.home.FolderFragment"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 

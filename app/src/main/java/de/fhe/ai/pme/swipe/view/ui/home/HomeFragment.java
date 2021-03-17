@@ -1,71 +1,75 @@
 package de.fhe.ai.pme.swipe.view.ui.home;
 
-import android.content.ClipData;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
-import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
 import de.fhe.ai.pme.swipe.view.ui.core.RecyclerViewClickListener;
 
-public class FolderFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment {
 
-    private FolderViewModel folderViewModel;
-    private FolderAdapter adapter;
+    private HomeViewModel homeViewModel;
+    private HomeAdapter adapter;
     private Spinner filterDropdown;
-    private static int currentFolderID;
+    private ArrayAdapter<CharSequence> arrayAdapterFolder;
+    private ArrayAdapter<CharSequence> arrayAdapterCard;
+    private static int currentFolderID = 0;
+    private static boolean currentFolderHasCards = false;
 
     //TODO: Bug - Sometimes shuffles Folders randomly when swapping them
     // Only after trying to Drag and Drop with other filter then manual order
     RecyclerViewClickListener itemListener = new RecyclerViewClickListener() {
         @Override
-        public void folderClick(View v, int position) {
-            Folder clickedFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, position);
-            currentFolderID = clickedFolder.getFolderID();
-            folderViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
+        public void itemClick(View v, int position) {
+            if(!currentFolderHasCards) {
+                Folder clickedFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, position);
+
+                // Set Information about current Folder
+                currentFolderID = clickedFolder.getFolderID();
+                currentFolderHasCards = clickedFolder.getContainsCards();
+
+                // Set Folder Spinner
+                filterDropdown.setAdapter(arrayAdapterFolder);
+
+                homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
+            }
+            else {
+
+            }
         }
     };
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        currentFolderID = 0;
-
         // Create Layout/Views
-        folderViewModel = this.getViewModel(FolderViewModel.class);
+        homeViewModel = this.getViewModel(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Get View Model
-        FolderViewModel folderViewModel = this.getViewModel(FolderViewModel.class);
+        HomeViewModel homeViewModel = this.getViewModel(HomeViewModel.class);
 
         // Get RecyclerView Reference
-        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_folders);
+        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_home);
         // Divider Item Decoration to differ between folders
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -74,7 +78,7 @@ public class FolderFragment extends BaseFragment {
         FragmentActivity fragmentActivity = this.requireActivity();
 
         // Create Adapter
-        adapter = new FolderAdapter(fragmentActivity, itemListener);
+        adapter = new HomeAdapter(fragmentActivity, itemListener);
 
         // Configure RecyclerView with Adapter and LayoutManager
         recyclerView.setAdapter( adapter );
@@ -83,10 +87,17 @@ public class FolderFragment extends BaseFragment {
 
         // Create Spinner Dropdown for Filters
         filterDropdown = root.findViewById(R.id.filters_folder);
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this.getContext(),
+
+        // Array Adapter for Dropdown displayed on Folder View
+        arrayAdapterFolder = ArrayAdapter.createFromResource(this.getContext(),
                 R.array.array_folder_dropdown, android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(R.layout.item_dropdown);
-        filterDropdown.setAdapter(arrayAdapter);
+        arrayAdapterFolder.setDropDownViewResource(R.layout.item_dropdown);
+        // Array Adapter for Dropdown displayed on Card View
+        arrayAdapterCard = ArrayAdapter.createFromResource(this.getContext(),
+                R.array.array_card_dropdown, android.R.layout.simple_spinner_item);
+        arrayAdapterCard.setDropDownViewResource(R.layout.item_dropdown);
+        // Set initial Dropdown on Folder View
+        filterDropdown.setAdapter(arrayAdapterFolder);
 
         // Create Listener
         filterDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -94,12 +105,17 @@ public class FolderFragment extends BaseFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Observe the LiveData Contact List in our View Model - if something changes, we
                 // update the list in our Adapter
-                folderViewModel.getFolders(currentFolderID, position).observe(fragmentActivity, adapter::setFolders);
+                if(!currentFolderHasCards) {
+                    homeViewModel.getFolders(currentFolderID, position).observe(fragmentActivity, adapter::setFolders);
+                }
+                else {
+                    homeViewModel.getCards(currentFolderID, position).observe(fragmentActivity, adapter::setCards);
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                folderViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+                homeViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
             }
 
         });
@@ -122,16 +138,30 @@ public class FolderFragment extends BaseFragment {
                     int fromPosition = viewHolder.getAdapterPosition();
                     int toPosition = target.getAdapterPosition();
                     if(lastFromPosition != fromPosition || lastToPosition != toPosition) {
-                        Folder fromFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, fromPosition);
-                        Folder toFolder = folderViewModel.getSingleFolderByManualOrder(currentFolderID, toPosition);
+                        if(!currentFolderHasCards) {
+                            Folder fromFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, fromPosition);
+                            Folder toFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, toPosition);
 
-                        fromFolder.setManualOrderID(toPosition);
-                        toFolder.setManualOrderID(fromPosition);
-                        folderViewModel.updateFolder(fromFolder);
-                        folderViewModel.updateFolder(toFolder);
+                            fromFolder.setManualOrderID(toPosition);
+                            toFolder.setManualOrderID(fromPosition);
+                            homeViewModel.updateFolder(fromFolder);
+                            homeViewModel.updateFolder(toFolder);
 
-                        adapter.swapFolders(fromPosition, toPosition);
-                        folderViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+                            adapter.swapFolders(fromPosition, toPosition);
+                            homeViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+                        }
+                        else {
+                            Card fromCard = homeViewModel.getSingleCardByManualOrder(currentFolderID, fromPosition);
+                            Card toCard = homeViewModel.getSingleCardByManualOrder(currentFolderID, toPosition);
+
+                            fromCard.setManualOrderID(toPosition);
+                            toCard.setManualOrderID(fromPosition);
+                            homeViewModel.updateCard(fromCard);
+                            homeViewModel.updateCard(toCard);
+
+                            adapter.swapCards(fromPosition, toPosition);
+                            homeViewModel.getCards(currentFolderID, 0).observe(fragmentActivity, adapter::setCards);
+                        }
 
                         lastFromPosition = fromPosition;
                         lastToPosition = toPosition;

@@ -7,7 +7,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Card {
+public class Card extends Item{
     public enum Rating {
         GREEN, YELLOW, RED
     }
@@ -19,10 +19,6 @@ public class Card {
     @NonNull
     @ColumnInfo(name = "manualOrderID")
     private int manualOrderID;
-
-    @NonNull
-    @ColumnInfo(name = "name")
-    private String name;
 
     @ColumnInfo(name = "rating")
     private Rating rating;
@@ -38,6 +34,8 @@ public class Card {
 
     @ColumnInfo(name = "modified")
     private long modified;
+
+    public Card(){}
 
     public Card(@NonNull String name, @NonNull int parentFolderID){
         this.manualOrderID = this.cardID;
