@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -49,9 +51,22 @@ public class FolderConfigurationFragment extends BaseFragment {
 
        //ASSIGN BUTTON THE FUNCTION
         Button saveBtn = root.findViewById(R.id.btn_save_folder);
-        saveBtn.setOnClickListener(this.saveButtonClickListener);
+        saveBtn.setOnClickListener(this.saveFolderButtonClickListener);
 
         return root;
     }
+
+    private final View.OnClickListener saveFolderButtonClickListener= v -> {
+
+        Folder newFolder = new Folder(
+                foldernameField.getText().toString(), 0);
+                folderConfigurationViewModel.saveFolder( newFolder );
+
+
+        NavController navController = Navigation.findNavController(this.getActivity(), R.id.nav_host_fragment);
+
+        navController.navigate(R.id.navigation_create_folder_or_card);
+
+    };
 
 }

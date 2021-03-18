@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 
 import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Card;
+import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.model.Page;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
 
@@ -63,7 +64,7 @@ public class CardConfigurationFragment extends BaseFragment {
 
         //ASSIGN BUTTON THE FUNCTION
         Button saveBtn = root.findViewById(R.id.btn_save_card);
-        saveBtn.setOnClickListener(this.saveButton);
+        saveBtn.setOnClickListener(this.saveCardButtonClickListener);
 
         return root;
     }
@@ -76,7 +77,30 @@ public class CardConfigurationFragment extends BaseFragment {
 
     }
     // Redirect to CreateFolderOrCard Fragment
-    private final View.OnClickListener saveButton= v -> {
+    private final View.OnClickListener saveCardButtonClickListener= v -> {
+
+        Card newCard = new Card(
+                CardNameField.getText().toString(),
+                0);
+        cardConfigurationViewModel.saveCard(newCard);
+
+        int cardID = newCard.getCardID();   //not working maybe try to get with modified
+
+
+        Page newFrontPage = new Page(
+                newCard.getCardID(),
+                true);
+        newFrontPage.setText(CardQuestionField.getText().toString());
+
+        pageConfigurationViewModel.savePage(newFrontPage);
+
+        Page newBackPage = new Page(
+                newCard.getCardID(),
+        false);
+
+        newBackPage.setText(CardAnswerField.getText().toString());
+
+        pageConfigurationViewModel.savePage(newBackPage);
 
         NavController navController = Navigation.findNavController(this.getActivity(), R.id.nav_host_fragment);
 
