@@ -17,67 +17,67 @@ public class HomeViewModel extends AndroidViewModel {
 
     public HomeViewModel(Application application) {
         super(application);
-        this.swipeRepository = SwipeRepository.getRepository(application);
+        swipeRepository = SwipeRepository.getRepository(application);
     }
 
     // Switch Case decides which Repository Method to use according to filter
-    public LiveData<List<Folder>> getFolders(int parentFolderID, int filter)
+    public LiveData<List<Folder>> getFolders(long parentFolderID, int filter)
     {
         switch(filter){
             default:
-                return this.swipeRepository.getFoldersByUserOrder(parentFolderID);
+                return swipeRepository.getFoldersByUserOrder(parentFolderID);
             case 1:
-                return this.swipeRepository.getFoldersByNameAsc(parentFolderID);
+                return swipeRepository.getFoldersByNameAsc(parentFolderID);
             case 2:
-                return this.swipeRepository.getFoldersByNameDesc(parentFolderID);
+                return swipeRepository.getFoldersByNameDesc(parentFolderID);
             case 3:
-                return this.swipeRepository.getFoldersByColorAsc(parentFolderID);
+                return swipeRepository.getFoldersByColorAsc(parentFolderID);
             case 4:
-                return this.swipeRepository.getFoldersByColorDesc(parentFolderID);
+                return swipeRepository.getFoldersByColorDesc(parentFolderID);
             case 5:
-                return this.swipeRepository.getFoldersByUpdateAsc(parentFolderID);
+                return swipeRepository.getFoldersByUpdateAsc(parentFolderID);
             case 6:
-                return this.swipeRepository.getFoldersByUpdateDesc(parentFolderID);
+                return swipeRepository.getFoldersByUpdateDesc(parentFolderID);
         }
     }
 
-    public LiveData<List<Card>> getCards(int parentFolderID, int filter)
+    public LiveData<List<Card>> getCards(long parentFolderID, int filter)
     {
         switch(filter){
             default:
-                return this.swipeRepository.getCardsByUserOrder(parentFolderID);
+                return swipeRepository.getCardsByUserOrder(parentFolderID);
             case 1:
-                return this.swipeRepository.getCardsByNameAsc(parentFolderID);
+                return swipeRepository.getCardsByNameAsc(parentFolderID);
             case 2:
-                return this.swipeRepository.getCardsByNameDesc(parentFolderID);
+                return swipeRepository.getCardsByNameDesc(parentFolderID);
             case 3:
-                return this.swipeRepository.getCardsByUpdateAsc(parentFolderID);
+                return swipeRepository.getCardsByUpdateAsc(parentFolderID);
             case 4:
-                return this.swipeRepository.getCardsByUpdateDesc(parentFolderID);
+                return swipeRepository.getCardsByUpdateDesc(parentFolderID);
         }
     }
 
     // Methods for Drag & Drop function
-    public Folder getSingleFolderByManualOrder(int parentFolderID, int manualOrderID)
+    public Folder getSingleFolderByManualOrder(long parentFolderID, long manualOrderID)
     {
-        return this.swipeRepository.getFirstFolderByUserOrder(parentFolderID, manualOrderID);
+        return swipeRepository.getFirstFolderByUserOrder(parentFolderID, manualOrderID);
     }
 
-    public Card getSingleCardByManualOrder(int parentFolderID, int manualOrderID)
+    public Card getSingleCardByManualOrder(long parentFolderID, long manualOrderID)
     {
-        return this.swipeRepository.getFirstCardByUserOrder(parentFolderID, manualOrderID);
+        return swipeRepository.getFirstCardByUserOrder(parentFolderID, manualOrderID);
     }
 
 
-    public Folder getFolderWithID(int folderID) {
-        return this.swipeRepository.getFolderWithID(folderID);
+    public Folder getFolderWithID(long folderID) {
+        return swipeRepository.getFolderWithID(folderID);
     }
 
     public void updateFolder(Folder folder) {
-        this.swipeRepository.update(folder);
+        swipeRepository.update(folder);
     }
 
     public void updateCard(Card card) {
-        this.swipeRepository.update(card);
+        swipeRepository.update(card);
     }
 }

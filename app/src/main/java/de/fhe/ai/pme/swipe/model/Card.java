@@ -14,19 +14,26 @@ public class Card extends Item{
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "cardID")
-    private int cardID;
+    private long cardID;
 
     @NonNull
     @ColumnInfo(name = "manualOrderID")
-    private int manualOrderID;
+    private long manualOrderID;
+
+    @NonNull
+    @ColumnInfo(name = "frontPage")
+    private long frontPageID;
+
+    @NonNull
+    @ColumnInfo(name = "backPage")
+    private long backPageID;
 
     @ColumnInfo(name = "rating")
     private Rating rating;
 
     @NonNull
-    @ForeignKey(entity = Folder.class, parentColumns = "parentFolderID", childColumns = "parentFolderID")
     @ColumnInfo(name = "parentFolderID")
-    private int parentFolderID;
+    private long parentFolderID;
 
     @NonNull
     @ColumnInfo(name = "created")
@@ -35,24 +42,24 @@ public class Card extends Item{
     @ColumnInfo(name = "modified")
     private long modified;
 
-    public Card(){}
-
-    public Card(@NonNull String name, @NonNull int parentFolderID){
+    public Card(@NonNull String name, @NonNull long parentFolderID, @NonNull long frontPageID, @NonNull long backPageID){
+        this.frontPageID = frontPageID;
+        this.backPageID = backPageID;
         this.manualOrderID = this.cardID;
         this.parentFolderID = parentFolderID;
         this.name = name;
         this.rating = Rating.RED;
     }
 
-    public int getCardID() {
+    public long getCardID() {
         return cardID;
     }
 
-    public void setCardID(int cardID) { this.cardID = cardID; }
+    public void setCardID(long cardID) { this.cardID = cardID; }
 
-    public int getManualOrderID() { return manualOrderID; }
+    public long getManualOrderID() { return manualOrderID; }
 
-    public void setManualOrderID(int manualOrderID ) {
+    public void setManualOrderID(long manualOrderID ) {
         this.manualOrderID = manualOrderID;
     }
 
@@ -65,6 +72,12 @@ public class Card extends Item{
         this.name = name;
     }
 
+    @NonNull
+    public long getFrontPageID() { return this.frontPageID; }
+
+    @NonNull
+    public long getBackPageID() { return this.backPageID; }
+
     public Rating getRating() {
         return rating;
     }
@@ -73,9 +86,9 @@ public class Card extends Item{
         this.rating = rating;
     }
 
-    public int getParentFolderID() { return parentFolderID; }
+    public long getParentFolderID() { return parentFolderID; }
 
-    public void setParentFolderID(int parentFolderID) {
+    public void setParentFolderID(long parentFolderID) {
         this.parentFolderID = parentFolderID;
     }
 
@@ -91,5 +104,3 @@ public class Card extends Item{
 
     public void setModified(long modified) { this.modified = modified; }
 }
-
-//TODO created

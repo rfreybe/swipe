@@ -11,12 +11,7 @@ public class Page {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "pageID")
-    private int pageID;
-
-    @ForeignKey(entity = Card.class, parentColumns = "cardID", childColumns = "cardID")
-    @NonNull
-    @ColumnInfo(name = "cardID")
-    private int cardID;
+    private long pageID;
 
     @NonNull
     @ColumnInfo(name = "isFrontPage")
@@ -36,20 +31,19 @@ public class Page {
     @ColumnInfo(name = "modified")
     private long modified;
 
-    public Page(@NonNull int cardID, @NonNull boolean isFrontPage) {
-        this.cardID = cardID;
+    public Page() {}
+
+    public Page(@NonNull boolean isFrontPage) {
         this.isFrontPage = isFrontPage;
     }
 
-    public int getPageID() {
+    public long getPageID() {
         return pageID;
     }
 
-    public void setPageID(int pageID) { this.pageID = pageID; }
+    public void setPageID(long pageID) { this.pageID = pageID; }
 
-    public int getCardID() {
-        return cardID;
-    }
+    public void setIsFrontPage(boolean isFrontPage) { this.isFrontPage = isFrontPage; }
 
     public boolean isFrontPage() {
         return isFrontPage;

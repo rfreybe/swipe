@@ -22,38 +22,54 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
+import de.fhe.ai.pme.swipe.storage.KeyValueStore;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
 import de.fhe.ai.pme.swipe.view.ui.core.RecyclerViewClickListener;
 
 public class HomeFragment extends BaseFragment {
 
     private HomeViewModel homeViewModel;
+    private KeyValueStore keyValueStore;
     private HomeAdapter adapter;
     private Spinner filterDropdown;
     private ArrayAdapter<CharSequence> arrayAdapterFolder;
     private ArrayAdapter<CharSequence> arrayAdapterCard;
-    private static int currentFolderID = 0;
-    private static boolean currentFolderHasCards = false;
+    private static long currentFolderID = 0;
+    private static boolean currentFolderContainsCards = false;
+    private static boolean currentFolderContainsFolders = false;
 
     //TODO: Bug - Sometimes shuffles Folders randomly when swapping them
     // Only after trying to Drag and Drop with other filter then manual order
     RecyclerViewClickListener itemListener = new RecyclerViewClickListener() {
         @Override
         public void itemClick(View v, int position) {
-            if(!currentFolderHasCards) {
+            if(!currentFolderContainsCards) {
                 Folder clickedFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, position);
 
-                // Set Information about current Folder
+                // Set Information about current Folder for Fragment and KeyValueStore
                 currentFolderID = clickedFolder.getFolderID();
-                currentFolderHasCards = clickedFolder.getContainsCards();
+                keyValueStore.editValueLong("currentFolderID", currentFolderID);
+                currentFolderContainsCards = clickedFolder.getContainsCards();
+                keyValueStore.editValueBool("currentFolderContainsCards", currentFolderContainsCards);
+                currentFolderContainsFolders = clickedFolder.getContainsFolders();
+                keyValueStore.editValueBool("currentFolderContainsFolders", currentFolderContainsFolders);
 
-                // Set Folder Spinner
-                filterDropdown.setAdapter(arrayAdapterFolder);
+                //TODO: Show cards
+//                if(!currentFolderContainsCards) {
+                    // Set Folder Spinner
+                    filterDropdown.setAdapter(arrayAdapterFolder);
 
-                homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
+                    homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
+//                }
+//                else {
+//                    // Set Card Spinner
+//                    filterDropdown.setAdapter(arrayAdapterCard);
+//
+//                    homeViewModel.getCards(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setCards);
+//                }
             }
             else {
-
+                //TODO: ViewPager for Cards
             }
         }
     };
@@ -62,11 +78,13 @@ public class HomeFragment extends BaseFragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         // Create Layout/Views
-        homeViewModel = this.getViewModel(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Get View Model
-        HomeViewModel homeViewModel = this.getViewModel(HomeViewModel.class);
+        homeViewModel = this.getViewModel(HomeViewModel.class);
+
+        // Get KeyValueStore
+        keyValueStore = new KeyValueStore(getActivity().getApplication());
 
         // Get RecyclerView Reference
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_home);
@@ -89,11 +107,11 @@ public class HomeFragment extends BaseFragment {
         filterDropdown = root.findViewById(R.id.filters_folder);
 
         // Array Adapter for Dropdown displayed on Folder View
-        arrayAdapterFolder = ArrayAdapter.createFromResource(this.getContext(),
+        arrayAdapterFolder = ArrayAdapter.createFromResource(getContext(),
                 R.array.array_folder_dropdown, android.R.layout.simple_spinner_item);
         arrayAdapterFolder.setDropDownViewResource(R.layout.item_dropdown);
         // Array Adapter for Dropdown displayed on Card View
-        arrayAdapterCard = ArrayAdapter.createFromResource(this.getContext(),
+        arrayAdapterCard = ArrayAdapter.createFromResource(getContext(),
                 R.array.array_card_dropdown, android.R.layout.simple_spinner_item);
         arrayAdapterCard.setDropDownViewResource(R.layout.item_dropdown);
         // Set initial Dropdown on Folder View
@@ -105,7 +123,7 @@ public class HomeFragment extends BaseFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Observe the LiveData Contact List in our View Model - if something changes, we
                 // update the list in our Adapter
-                if(!currentFolderHasCards) {
+                if(!currentFolderContainsCards) {
                     homeViewModel.getFolders(currentFolderID, position).observe(fragmentActivity, adapter::setFolders);
                 }
                 else {
@@ -128,7 +146,6 @@ public class HomeFragment extends BaseFragment {
             int lastFromPosition = 0;
             int lastToPosition = 0;
             @Override
-            //TODO: Make manualOrderID related to parentFolderID -> unique manualOrder inside every Folder
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                                   @NonNull RecyclerView.ViewHolder target) {
                 if (!filterDropdown.getSelectedItem().equals("Manual Order")) {
@@ -138,7 +155,7 @@ public class HomeFragment extends BaseFragment {
                     int fromPosition = viewHolder.getAdapterPosition();
                     int toPosition = target.getAdapterPosition();
                     if(lastFromPosition != fromPosition || lastToPosition != toPosition) {
-                        if(!currentFolderHasCards) {
+                        if(!currentFolderContainsCards) {
                             Folder fromFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, fromPosition);
                             Folder toFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, toPosition);
 
@@ -191,7 +208,7 @@ public class HomeFragment extends BaseFragment {
     //Redirect to CreateFolderOrCard Fragment
     private final View.OnClickListener addFolderOrCardClickListener= v -> {
 
-        NavController navController = Navigation.findNavController(this.getActivity(), R.id.nav_host_fragment);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
         navController.navigate(R.id.navigation_create_folder_or_card);
 

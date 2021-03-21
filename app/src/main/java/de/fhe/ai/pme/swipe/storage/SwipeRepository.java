@@ -66,6 +66,17 @@ public class SwipeRepository {
         return new MutableLiveData<>();
     }
 
+    private List<Folder> queryFolderList(Callable<List<Folder>> query) {
+        try {
+            return SwipeDatabase.executeWithReturn( query );
+        }
+        catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private Folder querySingleFolder(Callable<Folder> query )
     {
         try {
@@ -87,10 +98,10 @@ public class SwipeRepository {
             e.printStackTrace();
         }
 
-        return new Card();
+        return null;
     }
 
-    private List<Folder> queryFolders(Callable<List<Folder>> query )
+    private Page querySinglePage(Callable<Page> query )
     {
         try {
             return SwipeDatabase.executeWithReturn( query );
@@ -99,128 +110,7 @@ public class SwipeRepository {
             e.printStackTrace();
         }
 
-        return new List<Folder>() {
-            @Override
-            public int size() {
-                return 0;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public boolean contains(@Nullable Object o) {
-                return false;
-            }
-
-            @NonNull
-            @Override
-            public Iterator<Folder> iterator() {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @NonNull
-            @Override
-            public <T> T[] toArray(@NonNull T[] a) {
-                return null;
-            }
-
-            @Override
-            public boolean add(Folder folder) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(@Nullable Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(@NonNull Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(@NonNull Collection<? extends Folder> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(int index, @NonNull Collection<? extends Folder> c) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(@NonNull Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(@NonNull Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public Folder get(int index) {
-                return null;
-            }
-
-            @Override
-            public Folder set(int index, Folder element) {
-                return null;
-            }
-
-            @Override
-            public void add(int index, Folder element) {
-
-            }
-
-            @Override
-            public Folder remove(int index) {
-                return null;
-            }
-
-            @Override
-            public int indexOf(@Nullable Object o) {
-                return 0;
-            }
-
-            @Override
-            public int lastIndexOf(@Nullable Object o) {
-                return 0;
-            }
-
-            @NonNull
-            @Override
-            public ListIterator<Folder> listIterator() {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public ListIterator<Folder> listIterator(int index) {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public List<Folder> subList(int fromIndex, int toIndex) {
-                return null;
-            }
-        };
+        return new Page();
     }
 
     /*
@@ -246,23 +136,28 @@ public class SwipeRepository {
         SwipeDatabase.execute( () -> swipeDao.insert( this.prepareCardForWriting(card) ) );
     }
 
-    public void insert(Page page) {
-        SwipeDatabase.execute( () -> swipeDao.insert( this.preparePageForWriting(page) ) );
+    //TODO: this shit is weird
+    public long insert(Page page) {
+        final long[] pageID = new long[1];
+        SwipeDatabase.execute( () -> pageID[0] = swipeDao.insert( this.preparePageForWriting(page) ) );
+        return pageID[0];
     }
 
     public void delete(Folder folder) {
-        int folderID = folder.getFolderID();
-        if(swipeDao.getFirstFolder(folderID) != null) {
-            List<Folder> folders = swipeDao.getFoldersByUserOrder(folderID).getValue();
-            for(Folder f : folders) {
-                swipeDao.delete(f);
-            }
-        }
+        SwipeDatabase.execute( () -> swipeDao.delete(folder));
+    }
+
+    public void delete(Card card) {
+        SwipeDatabase.execute( () -> swipeDao.delete(card));
+    }
+
+    public void delete(Page page) {
+        SwipeDatabase.execute( () -> swipeDao.delete(page));
     }
 
     private Folder prepareFolderForWriting( Folder folder ) {
 
-        if( folder.getCreated() < 0 )
+        if( folder.getCreated() == 0 )
             folder.setCreated( System.currentTimeMillis() );
 
         folder.setModified( System.currentTimeMillis() );
@@ -272,7 +167,7 @@ public class SwipeRepository {
 
     private Card prepareCardForWriting( Card card ) {
 
-        if( card.getCreated() < 0 )
+        if( card.getCreated() == 0 )
             card.setCreated( System.currentTimeMillis() );
 
         card.setModified( System.currentTimeMillis() );
@@ -282,7 +177,7 @@ public class SwipeRepository {
 
     private Page preparePageForWriting( Page page ) {
 
-        if( page.getCreated() < 0 )
+        if( page.getCreated() == 0 )
             page.setCreated( System.currentTimeMillis() );
 
         page.setModified( System.currentTimeMillis() );
@@ -294,57 +189,55 @@ public class SwipeRepository {
     /*
         Folder-methods
      */
-    public Folder getFirstFolder(int folderID)
+    public Folder getFirstFolder(long folderID)
     {
         return this.querySingleFolder( () -> this.swipeDao.getFirstFolder(folderID));
     }
 
-    public Folder getFirstFolderByUserOrder(int parentFolderID, int manualOrderID)
+    public Folder getFirstFolderByUserOrder(long parentFolderID, long manualOrderID)
     {
         return this.querySingleFolder( () -> this.swipeDao.getFirstFolderByUserOrder(parentFolderID, manualOrderID));
     }
 
-    public Folder getFolderWithID(int folderID) {
+    public Folder getFolderWithID(long folderID) {
         return this.querySingleFolder( () -> this.swipeDao.getFolderWithID(folderID));
     }
 
-    public List<Folder> getFolders(int folderID)
-    {
-        return this.queryFolders( () -> this.swipeDao.getFolders(folderID));
+    public List<Folder> getFoldersActualValue(long parentFolderID) {
+        return this.queryFolderList( () -> this.swipeDao.getFoldersActualValue(parentFolderID));
     }
 
-
-    public LiveData<List<Folder>> getFoldersByUserOrder(int parentFolderID)
+    public LiveData<List<Folder>> getFoldersByUserOrder(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByUserOrder(parentFolderID) );
     }
 
-    public LiveData<List<Folder>> getFoldersByNameAsc(int parentFolderID)
+    public LiveData<List<Folder>> getFoldersByNameAsc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByNameAsc(parentFolderID) );
     }
 
-    public LiveData<List<Folder>> getFoldersByNameDesc(int parentFolderID)
+    public LiveData<List<Folder>> getFoldersByNameDesc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByNameDesc(parentFolderID) );
     }
 
-    public LiveData<List<Folder>> getFoldersByUpdateAsc(int parentFolderID)
+    public LiveData<List<Folder>> getFoldersByUpdateAsc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByUpdateAsc(parentFolderID) );
     }
 
-    public LiveData<List<Folder>> getFoldersByUpdateDesc(int parentFolderID)
+    public LiveData<List<Folder>> getFoldersByUpdateDesc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByUpdateDesc(parentFolderID) );
     }
 
-    public LiveData<List<Folder>> getFoldersByColorAsc(int parentFolderID)
+    public LiveData<List<Folder>> getFoldersByColorAsc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByColorAsc(parentFolderID) );
     }
 
-    public LiveData<List<Folder>> getFoldersByColorDesc(int parentFolderID)
+    public LiveData<List<Folder>> getFoldersByColorDesc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByColorDesc(parentFolderID) );
     }
@@ -352,32 +245,32 @@ public class SwipeRepository {
     /*
         Card-methods
      */
-    public Card getFirstCardByUserOrder(int parentFolderID, int manualOrderID)
+    public Card getFirstCardByUserOrder(long parentFolderID, long manualOrderID)
     {
         return this.querySingleCard( () -> this.swipeDao.getFirstCardByUserOrder(parentFolderID, manualOrderID));
     }
 
-    public LiveData<List<Card>> getCardsByUserOrder(int parentFolderID)
+    public LiveData<List<Card>> getCardsByUserOrder(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getCardsByUserOrder(parentFolderID) );
     }
 
-    public LiveData<List<Card>> getCardsByNameAsc(int parentFolderID)
+    public LiveData<List<Card>> getCardsByNameAsc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getCardsByUpdateAsc(parentFolderID) );
     }
 
-    public LiveData<List<Card>> getCardsByNameDesc(int parentFolderID)
+    public LiveData<List<Card>> getCardsByNameDesc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getCardsByNameDesc(parentFolderID) );
     }
 
-    public LiveData<List<Card>> getCardsByUpdateAsc(int parentFolderID)
+    public LiveData<List<Card>> getCardsByUpdateAsc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getCardsByNameAsc(parentFolderID) );
     }
 
-    public LiveData<List<Card>> getCardsByUpdateDesc(int parentFolderID)
+    public LiveData<List<Card>> getCardsByUpdateDesc(long parentFolderID)
     {
         return this.queryLiveData( () -> this.swipeDao.getCardsByUpdateDesc(parentFolderID) );
     }
@@ -393,11 +286,7 @@ public class SwipeRepository {
     /*
         Page-methods
      */
-    public LiveData<List<Page>> getFrontPage(int cardID) {
-        return this.queryLiveData( () -> this.swipeDao.getFrontPage(cardID));
-    }
-
-    public LiveData<List<Page>> getBackPage(int cardID) {
-        return this.queryLiveData( () -> this.swipeDao.getBackPage(cardID));
+    public Page getPageByID(long pageID) {
+        return this.querySinglePage( () -> this.swipeDao.getPageByID(pageID));
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -24,101 +25,98 @@ public interface SwipeDao {
         Basic insert-, update-, delete-methods
      */
     @Insert
-    void insert(Folder... folders);
+    void insert(Folder folders);
 
     @Update
-    void update(Folder... folders);
+    void update(Folder folders);
 
     @Delete
-    void delete(Folder... folders);
+    void delete(Folder folders);
 
     @Insert
-    void insert(Card... cards);
+    void insert(Card cards);
 
     @Update
-    void update(Card... cards);
+    void update(Card cards);
 
     @Delete
-    void delete(Card... cards);
+    void delete(Card cards);
 
     @Insert
-    void insert(Page... page);
+    long insert(Page page);
 
     @Update
-    void update(Page... page);
+    void update(Page page);
 
     @Delete
-    void delete(Page... page);
+    void delete(Page page);
 
     @Query("DELETE FROM Folder WHERE folderID LIKE :folderID OR parentFolderID LIKE :folderID")
-    void deleteFolder(int folderID);
+    void deleteFolder(long folderID);
 
     /* Function Methods Folder */
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
-    Folder getFirstFolder(int folderID);
+    Folder getFirstFolder(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID AND manualOrderID LIKE :manualOrderID")
-    Folder getFirstFolderByUserOrder(int folderID, int manualOrderID);
+    Folder getFirstFolderByUserOrder(long folderID, long manualOrderID);
 
     @Query("SELECT * FROM Folder WHERE folderID LIKE :folderID ORDER BY manualOrderID")
-    Folder getFolderWithID(int folderID);
+    Folder getFolderWithID(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
-    List<Folder> getFolders(int folderID);
+    List<Folder> getFoldersActualValue(long folderID);
 
     /* Filter Methods Folder */
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
-    LiveData<List<Folder>> getFoldersByUserOrder(int folderID);
+    LiveData<List<Folder>> getFoldersByUserOrder(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY name ASC")
-    LiveData<List<Folder>> getFoldersByNameAsc(int folderID);
+    LiveData<List<Folder>> getFoldersByNameAsc(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY name DESC")
-    LiveData<List<Folder>> getFoldersByNameDesc(int folderID);
+    LiveData<List<Folder>> getFoldersByNameDesc(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY modified ASC")
-    LiveData<List<Folder>> getFoldersByUpdateAsc(int folderID);
+    LiveData<List<Folder>> getFoldersByUpdateAsc(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY modified DESC")
-    LiveData<List<Folder>> getFoldersByUpdateDesc(int folderID);
+    LiveData<List<Folder>> getFoldersByUpdateDesc(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY color, modified ASC")
-    LiveData<List<Folder>> getFoldersByColorAsc(int folderID);
+    LiveData<List<Folder>> getFoldersByColorAsc(long folderID);
 
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY color, modified DESC")
-    LiveData<List<Folder>> getFoldersByColorDesc(int folderID);
+    LiveData<List<Folder>> getFoldersByColorDesc(long folderID);
 
     /*
         Function Methods Card
     */
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID AND manualOrderID LIKE :manualOrderID")
-    Card getFirstCardByUserOrder(int folderID, int manualOrderID);
+    Card getFirstCardByUserOrder(long folderID, long manualOrderID);
 
      /*
         Select-statements for Card
      */
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
-    LiveData<List<Card>> getCardsByUserOrder(int folderID);
+    LiveData<List<Card>> getCardsByUserOrder(long folderID);
 
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY name ASC")
-    LiveData<List<Card>> getCardsByNameAsc(int folderID);
+    LiveData<List<Card>> getCardsByNameAsc(long folderID);
 
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY name DESC")
-    LiveData<List<Card>> getCardsByNameDesc(int folderID);
+    LiveData<List<Card>> getCardsByNameDesc(long folderID);
 
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY modified ASC")
-    LiveData<List<Card>> getCardsByUpdateAsc(int folderID);
+    LiveData<List<Card>> getCardsByUpdateAsc(long folderID);
 
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY modified DESC")
-    LiveData<List<Card>> getCardsByUpdateDesc(int folderID);
+    LiveData<List<Card>> getCardsByUpdateDesc(long folderID);
 
     /*
         Select-statements for Page
      */
-    @Query("SELECT * FROM Page WHERE cardID LIKE :cardID AND isFrontpage = 1")
-    LiveData<List<Page>> getFrontPage(int cardID);
-
-    @Query("SELECT * FROM Page WHERE cardID LIKE :cardID AND isFrontpage = 0")
-    LiveData<List<Page>> getBackPage(int cardID);
+    @Query("SELECT * FROM Page WHERE pageID LIKE :pageID")
+    Page getPageByID(long pageID);
 }
 

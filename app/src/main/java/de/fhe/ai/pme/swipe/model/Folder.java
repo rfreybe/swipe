@@ -15,11 +15,11 @@ public class Folder extends Item{
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "folderID")
-    private int folderID;
+    private long folderID;
 
     @NonNull
     @ColumnInfo(name = "manualOrderID")
-    private int manualOrderID;
+    private long manualOrderID;
 
     @NonNull
     @ColumnInfo(name = "color")
@@ -27,10 +27,13 @@ public class Folder extends Item{
 
     @ForeignKey(entity = Folder.class, parentColumns = "parentFolderID", childColumns = "folderID")
     @ColumnInfo(name = "parentFolderID")
-    private int parentFolderID;
+    private long parentFolderID;
     
     @ColumnInfo(name = "containsCards")
     private boolean containsCards;
+
+    @ColumnInfo(name = "containsFolders")
+    private boolean containsFolders;
 
     @NonNull
     @ColumnInfo(name = "created")
@@ -47,25 +50,27 @@ public class Folder extends Item{
         this.name = name;
         this.color = Color.GREY;
         this.containsCards = false;
+        this.containsFolders = false;
     }
 
-    public Folder(@NonNull String name, int parentFolderID){
+    public Folder(@NonNull String name, long parentFolderID){
         this.manualOrderID = 0;
         this.parentFolderID = parentFolderID;
         this.name = name;
         this.color = Color.GREY;
         this.containsCards = false;
+        this.containsFolders = false;
     }
 
-    public int getFolderID() {
+    public long getFolderID() {
         return folderID;
     }
 
-    public void setFolderID(int folderID) { this.folderID = folderID; }
+    public void setFolderID(long folderID) { this.folderID = folderID; }
 
-    public int getManualOrderID() { return manualOrderID; }
+    public long getManualOrderID() { return manualOrderID; }
 
-    public void setManualOrderID(int manualOrderID ) {
+    public void setManualOrderID(long manualOrderID ) {
         this.manualOrderID = manualOrderID;
     }
 
@@ -87,17 +92,21 @@ public class Folder extends Item{
         this.color = color;
     }
 
-    public int getParentFolderID() {
+    public long getParentFolderID() {
         return parentFolderID;
     }
 
-    public void setParentFolderID(int parentFolderID) {
+    public void setParentFolderID(long parentFolderID) {
         this.parentFolderID = parentFolderID;
     }
     
     public void setContainsCards(boolean containsCards) { this.containsCards = containsCards; }
 
     public boolean getContainsCards() { return containsCards; }
+
+    public void setContainsFolders(boolean containsFolders) { this.containsFolders = containsFolders; }
+
+    public boolean getContainsFolders() { return containsFolders; }
 
     public long getCreated() {
         return created;

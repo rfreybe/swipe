@@ -1,5 +1,6 @@
 package de.fhe.ai.pme.swipe.view.ui.home;
 
+import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.security.Key;
 import java.util.List;
 
 import de.fhe.ai.pme.swipe.R;
 import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.model.Item;
+import de.fhe.ai.pme.swipe.storage.KeyValueStore;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 import de.fhe.ai.pme.swipe.view.ui.core.RecyclerViewClickListener;
 
@@ -23,13 +26,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     // View Holder definition for Folder
     public static class HomeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private final TextView folderName;
-        private final ImageView folderImage;
+        private final TextView itemName;
+        private final ImageView itemImage;
 
         private HomeViewHolder(View itemView) {
             super(itemView);
-            this.folderName = itemView.findViewById(R.id.item_folder_card_name);
-            this.folderImage = itemView.findViewById(R.id.item_folder_card_image);
+            this.itemName = itemView.findViewById(R.id.item_folder_card_name);
+            this.itemImage = itemView.findViewById(R.id.item_folder_card_image);
             itemView.setOnClickListener(this);
         }
 
@@ -40,12 +43,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     }
 
     private final LayoutInflater inflater;
+    private boolean ItemsAreCards;
     private List<Folder> folderList;
     private List<Card> cardList;
     private static RecyclerViewClickListener itemListener;
 
     public HomeAdapter(Context context, RecyclerViewClickListener itemListener) {
+        KeyValueStore keyValueStore =  new KeyValueStore((Application)context.getApplicationContext());
+
         this.inflater = LayoutInflater.from(context);
+        this.ItemsAreCards = keyValueStore.getValueBool("currentFolderContainsCards");
         this.itemListener = itemListener;
     }
 
@@ -60,17 +67,34 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
 
-        if (this.folderList != null && !this.folderList.isEmpty()) {
-            Item current = this.folderList.get(position);
+        if(!ItemsAreCards) {
+            if (this.folderList != null && !this.folderList.isEmpty()) {
+                Folder current = this.folderList.get(position);
 
-            // Set Name and Image Resource
-            holder.folderName.setText(current.getName());
-            holder.folderImage.setImageResource(R.drawable.ic_folder);
+                // Set Name and Image Resource
+                holder.itemName.setText(current.getName());
+                holder.itemImage.setImageResource(R.drawable.ic_folder);
+            }
+            else {
+                // Covers the case of data not being ready yet.
+                holder.itemName.setText(R.string.text_empty_list);
+            }
         }
         else {
-            // Covers the case of data not being ready yet.
-            holder.folderName.setText(R.string.text_empty_list);
+            if (this.cardList != null && !this.folderList.isEmpty()) {
+                Card current = this.cardList.get(position);
+
+                // Set Name and Image Resource
+                holder.itemName.setText(current.getName());
+                holder.itemImage.setImageResource(R.drawable.ic_card);
+            }
+            else {
+                // Covers the case of data not being ready yet.
+                holder.itemName.setText(R.string.text_empty_list);
+            }
         }
+
+
     }
 
     @Override
