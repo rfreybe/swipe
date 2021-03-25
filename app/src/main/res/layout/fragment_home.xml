@@ -7,8 +7,6 @@
     tools:context=".view.ui.home.HomeFragment"
     android:id="@+id/constraint_layout">
 
-
-
     <Spinner
         android:id="@+id/filters_folder"
         android:layout_width="match_parent"

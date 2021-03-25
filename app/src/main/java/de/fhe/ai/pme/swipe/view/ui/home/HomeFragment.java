@@ -1,11 +1,13 @@
 package de.fhe.ai.pme.swipe.view.ui.home;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -55,15 +57,20 @@ public class HomeFragment extends BaseFragment {
                 keyValueStore.editValueBool("currentFolderContainsFolders", currentFolderContainsFolders);
 
                 //TODO: Show cards
-//                if(!currentFolderContainsCards) {
+                //if(!currentFolderContainsCards) {
                     // Set Folder Spinner
-                    filterDropdown.setAdapter(arrayAdapterFolder);
+                    if(filterDropdown.getAdapter() != arrayAdapterFolder) {
+                        String adapterSelectedItemPosition = (String)filterDropdown.getAdapter().getItem(filterDropdown.getSelectedItemPosition());
+                        filterDropdown.setAdapter(arrayAdapterFolder);
+                    }
 
                     homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
 //                }
 //                else {
 //                    // Set Card Spinner
-//                    filterDropdown.setAdapter(arrayAdapterCard);
+//                    if(filterDropdown.getAdapter() != arrayAdapterCard) {
+//                        filterDropdown.setAdapter(arrayAdapterCard);
+//                    }
 //
 //                    homeViewModel.getCards(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setCards);
 //                }
@@ -133,7 +140,12 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                homeViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+                if(!currentFolderContainsCards) {
+                    homeViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+                }
+                else {
+                    homeViewModel.getCards(currentFolderID, 0).observe(fragmentActivity, adapter::setCards);
+                }
             }
 
         });
@@ -198,11 +210,15 @@ public class HomeFragment extends BaseFragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        // On Click Listener Add Folder or Card
         ImageView AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
-        return root;
+        // On Click Listener Back Button
+        ImageView BackBtn = getActivity().findViewById(R.id.back_button);
+        BackBtn.setOnClickListener(this.backBtnListener);
 
+        return root;
     }
 
     //Redirect to CreateFolderOrCard Fragment
@@ -211,6 +227,16 @@ public class HomeFragment extends BaseFragment {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
         navController.navigate(R.id.navigation_create_folder_or_card);
+    };
 
+    // Change currentFolderID to ID of parentFolder
+    private final View.OnClickListener backBtnListener= v -> {
+        if(currentFolderID != 0) {
+            Folder currentFolder = homeViewModel.getFolderWithID(currentFolderID);
+            currentFolderID = currentFolder.getParentFolderID();
+            keyValueStore.editValueLong("currentFolderID", currentFolderID);
+
+            homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(getViewLifecycleOwner(), adapter::setFolders);
+        }
     };
 }
