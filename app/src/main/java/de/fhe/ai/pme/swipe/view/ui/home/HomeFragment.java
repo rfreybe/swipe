@@ -1,13 +1,11 @@
 package de.fhe.ai.pme.swipe.view.ui.home;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -214,11 +212,15 @@ public class HomeFragment extends BaseFragment {
         ImageView AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
+        ImageView cardBtn = root.findViewById(R.id.btn_card);
+        cardBtn.setOnClickListener(this.addCardClickListener);
+
         // On Click Listener Back Button
         ImageView BackBtn = getActivity().findViewById(R.id.back_button);
         BackBtn.setOnClickListener(this.backBtnListener);
 
         return root;
+
     }
 
     //Redirect to CreateFolderOrCard Fragment
@@ -238,5 +240,12 @@ public class HomeFragment extends BaseFragment {
 
             homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(getViewLifecycleOwner(), adapter::setFolders);
         }
+    };
+
+    private final View.OnClickListener addCardClickListener= v -> {
+
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+        navController.navigate(R.id.navigation_card);
     };
 }

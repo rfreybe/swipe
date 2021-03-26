@@ -40,4 +40,10 @@
         android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.card.CardConfigurationFragment"
         android:label="@string/title_card_configuration"
         tools:layout="@layout/fragment_card_configuration" />
+
+    <fragment
+        android:id="@+id/navigation_card"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.card_view.CardViewFragment"
+        android:label="@string/title_card_configuration"
+        tools:layout="@layout/fragment_card" />
 </navigation>
