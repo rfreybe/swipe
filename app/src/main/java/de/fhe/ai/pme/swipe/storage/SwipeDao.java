@@ -43,7 +43,7 @@ public interface SwipeDao {
     void delete(Card cards);
 
     @Insert
-    long insert(Page page);
+    void insert(Page page);
 
     @Update
     void update(Page page);
@@ -116,6 +116,9 @@ public interface SwipeDao {
     /*
         Select-statements for Page
      */
+    @Query("SELECT * FROM Page")
+    List<Page> getAllPages();
+
     @Query("SELECT * FROM Page WHERE pageID LIKE :pageID")
     Page getPageByID(long pageID);
 }

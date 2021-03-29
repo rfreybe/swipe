@@ -148,19 +148,21 @@ public class CardConfigurationFragment extends BaseFragment {
         //Create Front Page
         Page frontPage = new Page(true);
         frontPage.setText(CardQuestionField.getText().toString());
-        long frontPageID = cardConfigurationViewModel.savePage(frontPage);
+        cardConfigurationViewModel.savePage(frontPage);
+        long frontPageID = cardConfigurationViewModel.getLastCreatedPageID();
 
         //Create Back Page
         Page backPage = new Page(false);
         backPage.setText(CardAnswerField.getText().toString());
-        long backPageID = cardConfigurationViewModel.savePage(backPage);
+        cardConfigurationViewModel.savePage(backPage);
+        long backPageID = cardConfigurationViewModel.getLastCreatedPageID();
+
 
         //Create Card
-        //TODO: ID's of Front Page & Back Page still 0
         Card newCard = new Card(CardNameField.getText().toString(), keyValueStore.getValueLong("currentFolderID"), frontPageID, backPageID);
         cardConfigurationViewModel.saveCard(newCard);
 
-
+        keyValueStore.editValueBool("currentFolderContainsCards", true);
 
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 

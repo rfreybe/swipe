@@ -54,8 +54,7 @@ public class HomeFragment extends BaseFragment {
                 currentFolderContainsFolders = clickedFolder.getContainsFolders();
                 keyValueStore.editValueBool("currentFolderContainsFolders", currentFolderContainsFolders);
 
-                //TODO: Show cards
-                //if(!currentFolderContainsCards) {
+                if(!currentFolderContainsCards) {
                     // Set Folder Spinner
                     if(filterDropdown.getAdapter() != arrayAdapterFolder) {
                         String adapterSelectedItemPosition = (String)filterDropdown.getAdapter().getItem(filterDropdown.getSelectedItemPosition());
@@ -63,15 +62,15 @@ public class HomeFragment extends BaseFragment {
                     }
 
                     homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
-//                }
-//                else {
-//                    // Set Card Spinner
-//                    if(filterDropdown.getAdapter() != arrayAdapterCard) {
-//                        filterDropdown.setAdapter(arrayAdapterCard);
-//                    }
-//
-//                    homeViewModel.getCards(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setCards);
-//                }
+                }
+                else {
+                    // Set Card Spinner
+                    if(filterDropdown.getAdapter() != arrayAdapterCard) {
+                        filterDropdown.setAdapter(arrayAdapterCard);
+                    }
+
+                    homeViewModel.getCards(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setCards);
+                }
             }
             else {
                 //TODO: ViewPager for Cards
@@ -107,6 +106,12 @@ public class HomeFragment extends BaseFragment {
         recyclerView.setAdapter( adapter );
         recyclerView.setLayoutManager( new LinearLayoutManager(this.requireActivity() ) );
         //recyclerView.setLayoutManager( new GridLayoutManager(this.requireActivity(), 2) );
+
+        // Set initial value for currentFolderContainsCards
+        if(currentFolderID == 0) {
+            currentFolderContainsCards = false;
+            keyValueStore.editValueBool("currentFolderContainsCards", false);
+        }
 
         // Create Spinner Dropdown for Filters
         filterDropdown = root.findViewById(R.id.filters_folder);
@@ -235,8 +240,21 @@ public class HomeFragment extends BaseFragment {
     private final View.OnClickListener backBtnListener= v -> {
         if(currentFolderID != 0) {
             Folder currentFolder = homeViewModel.getFolderWithID(currentFolderID);
-            currentFolderID = currentFolder.getParentFolderID();
-            keyValueStore.editValueLong("currentFolderID", currentFolderID);
+            long parentFolderID = currentFolder.getParentFolderID();
+            keyValueStore.editValueLong("currentFolderID", parentFolderID);
+            currentFolderID = parentFolderID;
+
+            if(currentFolderID != 0) {
+                Folder parentFolder = homeViewModel.getFolderWithID(currentFolderID);
+                keyValueStore.editValueBool("currentFolderContainsCards", parentFolder.getContainsCards());
+                keyValueStore.editValueBool("currentFolderContainsFolders", parentFolder.getContainsFolders());
+            }
+            else {
+                currentFolderContainsCards = false;
+                keyValueStore.editValueBool("currentFolderContainsCards", false);
+                currentFolderContainsFolders = true;
+                keyValueStore.editValueBool("currentFolderContainsFolders", true);
+            }
 
             homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(getViewLifecycleOwner(), adapter::setFolders);
         }

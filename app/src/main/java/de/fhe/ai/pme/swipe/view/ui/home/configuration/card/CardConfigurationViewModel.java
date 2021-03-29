@@ -4,6 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 
+import java.util.List;
+
 import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.model.Page;
@@ -32,8 +34,15 @@ public class  CardConfigurationViewModel extends AndroidViewModel {
         }
     }
 
-    public long savePage(Page page) {
-        return this.swipeRepository.insert(page);
+    public void savePage(Page page) {
+        this.swipeRepository.insert(page);
+    }
+
+    public long getLastCreatedPageID() {
+        List<Page> pageList = this.swipeRepository.getPages();
+        int pageListSize = pageList.size();
+        long pageID = pageList.get(pageListSize - 1).getPageID();
+        return pageID;
     }
 }
 

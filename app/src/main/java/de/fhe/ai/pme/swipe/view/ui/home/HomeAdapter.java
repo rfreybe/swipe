@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.javafaker.App;
+
 import java.security.Key;
 import java.util.List;
 
@@ -43,16 +45,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     }
 
     private final LayoutInflater inflater;
-    private boolean ItemsAreCards;
     private List<Folder> folderList;
     private List<Card> cardList;
+    private KeyValueStore keyValueStore;
     private static RecyclerViewClickListener itemListener;
 
     public HomeAdapter(Context context, RecyclerViewClickListener itemListener) {
-        KeyValueStore keyValueStore =  new KeyValueStore((Application)context.getApplicationContext());
+        KeyValueStore keyValueStore = new KeyValueStore((Application)context.getApplicationContext());
 
         this.inflater = LayoutInflater.from(context);
-        this.ItemsAreCards = keyValueStore.getValueBool("currentFolderContainsCards");
+        this.keyValueStore = keyValueStore;
         this.itemListener = itemListener;
     }
 
@@ -66,7 +68,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
-
+        boolean ItemsAreCards = keyValueStore.getValueBool("currentFolderContainsCards");
         if(!ItemsAreCards) {
             if (this.folderList != null && !this.folderList.isEmpty()) {
                 Folder current = this.folderList.get(position);
@@ -81,7 +83,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             }
         }
         else {
-            if (this.cardList != null && !this.folderList.isEmpty()) {
+            if (this.cardList != null && !this.cardList.isEmpty()) {
                 Card current = this.cardList.get(position);
 
                 // Set Name and Image Resource

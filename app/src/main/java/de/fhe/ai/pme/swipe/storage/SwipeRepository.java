@@ -77,6 +77,17 @@ public class SwipeRepository {
         return null;
     }
 
+    private List<Page> queryPageList(Callable<List<Page>> query) {
+        try {
+            return SwipeDatabase.executeWithReturn( query );
+        }
+        catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private Folder querySingleFolder(Callable<Folder> query )
     {
         try {
@@ -137,10 +148,8 @@ public class SwipeRepository {
     }
 
     //TODO: this shit is weird
-    public long insert(Page page) {
-        final long[] pageID = new long[1];
-        SwipeDatabase.execute( () -> pageID[0] = swipeDao.insert( this.preparePageForWriting(page) ) );
-        return pageID[0];
+    public void insert(Page page) {
+        SwipeDatabase.execute( () -> this.swipeDao.insert( this.preparePageForWriting(page) ) );
     }
 
     public void delete(Folder folder) {
@@ -286,6 +295,10 @@ public class SwipeRepository {
     /*
         Page-methods
      */
+    public List<Page> getPages() {
+        return this.queryPageList( () -> this.swipeDao.getAllPages());
+    }
+
     public Page getPageByID(long pageID) {
         return this.querySinglePage( () -> this.swipeDao.getPageByID(pageID));
     }
