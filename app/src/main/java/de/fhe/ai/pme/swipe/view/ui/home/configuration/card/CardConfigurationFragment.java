@@ -56,6 +56,11 @@ public class CardConfigurationFragment extends BaseFragment {
     private EditText CardNameField;
     private EditText CardQuestionField;
     private EditText CardAnswerField;
+    private boolean filesOk;
+    private String camQuestionFilePath;
+    private String camAnswerFilePath;
+    private String galleryQuestionFilePath;
+    private String galleryAnswerFilePath;
 
 
     private File createImageFile() throws IOException {
@@ -111,6 +116,7 @@ public class CardConfigurationFragment extends BaseFragment {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
+            camQuestionFilePath = photoFile.getPath();
         }
     };
 
@@ -135,15 +141,15 @@ public class CardConfigurationFragment extends BaseFragment {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
+            camAnswerFilePath = photoFile.getPath();
         }
     };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_PICK) && resultCode == RESULT_OK){
-            //übergebe das bild an die karte
-            //this.vorderseite.setImageURI( URI.parse(currentPhotoPath));
+        if(resultCode == RESULT_OK && (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_PICK)) {
+            filesOk = true;
         }
     }
 
@@ -160,6 +166,7 @@ public class CardConfigurationFragment extends BaseFragment {
         this.CardNameField = root.findViewById(R.id.et_name_of_card);
         this.CardQuestionField = root.findViewById(R.id.et_question);
         this.CardAnswerField = root.findViewById(R.id.et_answer);
+        this.filesOk = false;
 
         // Save Card
         Button saveBtn = root.findViewById(R.id.btn_save_card);
@@ -196,12 +203,18 @@ public class CardConfigurationFragment extends BaseFragment {
         //Create Front Page
         Page frontPage = new Page(true);
         frontPage.setText(CardQuestionField.getText().toString());
+        if(filesOk && camQuestionFilePath != null) {
+            frontPage.setFile(camQuestionFilePath);
+        }
         cardConfigurationViewModel.savePage(frontPage);
         long frontPageID = cardConfigurationViewModel.getLastCreatedPageID();
 
         //Create Back Page
         Page backPage = new Page(false);
         backPage.setText(CardAnswerField.getText().toString());
+        if(filesOk && camAnswerFilePath != null) {
+            backPage.setFile(camAnswerFilePath);
+        }
         cardConfigurationViewModel.savePage(backPage);
         long backPageID = cardConfigurationViewModel.getLastCreatedPageID();
 

@@ -1,5 +1,6 @@
 package de.fhe.ai.pme.swipe.view.ui.home.configuration.card_view;
 
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,8 +55,15 @@ public class CardViewFragment extends BaseFragment {
         TextView text = root.findViewById(R.id.textView4);
         text.setText(frontPage.getText());
 
-        ImageView card =  root.findViewById(R.id.imageView);
-        card.setImageResource(R.drawable.ic_baseline_camera_front_24);
+        ImageView card = root.findViewById(R.id.imageView);
+        if(frontPage.getFile() != null) {
+            // Set File Path of Page
+            card.setImageBitmap(BitmapFactory.decodeFile(frontPage.getFile()));
+
+        }
+        else {
+            card.setImageResource(R.drawable.ic_baseline_camera_front_24);
+        }
 
         // On Click Listener Back Button
         ImageView BackBtn = getActivity().findViewById(R.id.back_button);
@@ -121,8 +129,8 @@ public class CardViewFragment extends BaseFragment {
                 card.setImageResource(R.drawable.ic_baseline_camera_front_24);
             }
             else {
-                // TODO: Set File Path
-                card.setImageResource(R.drawable.ic_baseline_camera_front_24);
+                // Set File Path of Page
+                card.setImageBitmap(BitmapFactory.decodeFile(frontPage.getFile()));
             }
             text.setText(frontPage.getText());
             innerLayout.animate().rotationYBy(360f).start();
@@ -133,8 +141,8 @@ public class CardViewFragment extends BaseFragment {
                 card.setImageResource(R.drawable.ic_baseline_camera_rear_24);
             }
             else {
-                // TODO: Set File Path
-                card.setImageResource(R.drawable.ic_baseline_camera_rear_24);
+                // Set File Path of Page
+                card.setImageBitmap(BitmapFactory.decodeFile(backPage.getFile()));
             }
             text.setText(backPage.getText());
             innerLayout.animate().rotationYBy(360f).start();

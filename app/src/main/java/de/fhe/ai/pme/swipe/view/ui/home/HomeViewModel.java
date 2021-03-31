@@ -133,6 +133,11 @@ public class HomeViewModel extends AndroidViewModel {
         List<Card> cardListInParentFolder = swipeRepository.getCardsActualValue(card.getParentFolderID());
         long currentManualOrderID = card.getManualOrderID();
 
+        Page frontPage = swipeRepository.getPageByID(card.getFrontPageID());
+        Page backPage = swipeRepository.getPageByID(card.getBackPageID());
+
+        swipeRepository.delete(frontPage);
+        swipeRepository.delete(backPage);
         swipeRepository.delete(card);
 
         for(Card pf : cardListInParentFolder) {
