@@ -8,5 +8,10 @@ public class StatisticsViewModel extends AndroidViewModel {
 
     public StatisticsViewModel(Application application) {
         super(application);
+
     }
+
+
+
+
 }

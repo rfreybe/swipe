@@ -141,11 +141,20 @@ public class CardViewFragment extends BaseFragment {
     private final View.OnClickListener ratingGoodListener= v -> {
         ConstraintLayout innerLayout = root.findViewById(R.id.inner_layout);
         innerLayout.animate().translationX(1000f);
+        //Goodcounter +1
+        int goodValue = keyValueStore.getValueInt("goodValue");
+        ++goodValue;
+        keyValueStore.editValueInt("goodValue",goodValue);
+
     };
 
     private final View.OnClickListener ratingBadListener= v -> {
     ConstraintLayout innerLayout = root.findViewById(R.id.inner_layout);
         innerLayout.animate().translationX(-1000f);
+        //Badcounter +1
+        int badValue = keyValueStore.getValueInt("badValue");
+        ++badValue;
+        keyValueStore.editValueInt("badValue",badValue);
     };
 }
 
