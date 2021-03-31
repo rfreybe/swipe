@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -37,9 +38,13 @@ public class FolderConfigurationFragment extends BaseFragment {
 
         folderNameField = root.findViewById(R.id.et_name_of_folder);
 
-        //Set OnClickListener
+        // Save Folder
         Button saveBtn = root.findViewById(R.id.btn_save_folder);
         saveBtn.setOnClickListener(this.saveFolderButtonClickListener);
+
+        // On Click Listener Back Button
+        ImageView BackBtn = getActivity().findViewById(R.id.back_button);
+        BackBtn.setOnClickListener(this.backBtnListener);
 
         return root;
     }
@@ -52,8 +57,17 @@ public class FolderConfigurationFragment extends BaseFragment {
         newFolder.setManualOrderID(folderConfigurationViewModel.getNextManualOrderID(currentFolderID));
         folderConfigurationViewModel.saveFolder( newFolder );
 
+        keyValueStore.editValueBool("currentFolderContainsFolders", true);
+
         //Redirect to CreateFolderOrCardFragment so the User can add additional Items
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(R.id.navigation_create_folder_or_card);
+    };
+
+    private final View.OnClickListener backBtnListener= v -> {
+
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
         navController.navigate(R.id.navigation_create_folder_or_card);
     };
 

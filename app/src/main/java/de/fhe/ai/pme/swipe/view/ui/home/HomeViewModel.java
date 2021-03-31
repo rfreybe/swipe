@@ -9,6 +9,7 @@ import java.util.List;
 
 import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
+import de.fhe.ai.pme.swipe.model.Page;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 
 public class HomeViewModel extends AndroidViewModel {
@@ -76,5 +77,27 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void updateCard(Card card) {
         swipeRepository.update(card);
+    }
+
+    public void deleteFolder(Folder folder) {
+
+        if(folder.getContainsCards()) {
+            List<Card> cardList = swipeRepository.getCardsActualValue(folder.getFolderID());
+            for(Card c : cardList) {
+                Page frontPage = swipeRepository.getPageByID(c.getFrontPageID());
+                Page backPage = swipeRepository.getPageByID(c.getBackPageID());
+
+                swipeRepository.delete(frontPage);
+                swipeRepository.delete(backPage);
+                swipeRepository.delete(c);
+            }
+        }
+        else {
+            List<Folder> folderList = swipeRepository.getFoldersActualValue(folder.getFolderID());
+            for(Folder f : folderList) {
+                deleteFolder(f);
+            }
+        }
+        swipeRepository.delete(folder);
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -35,6 +36,10 @@ public class CreateFolderOrCardFragment extends BaseFragment {
         LinearLayout add_card = root.findViewById(R.id.add_card);
         add_card.setOnClickListener(this.addCard);
 
+        // On Click Listener Back Button
+        ImageView BackBtn = getActivity().findViewById(R.id.back_button);
+        BackBtn.setOnClickListener(this.backBtnListener);
+
         return root;
     }
 
@@ -59,6 +64,13 @@ public class CreateFolderOrCardFragment extends BaseFragment {
             navController.navigate(R.id.navigation_card_configuration);
         }
 
+    };
+
+    private final View.OnClickListener backBtnListener= v -> {
+
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+        navController.navigate(R.id.navigation_home);
     };
 
 }

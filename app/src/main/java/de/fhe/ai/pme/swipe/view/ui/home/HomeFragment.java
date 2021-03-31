@@ -76,8 +76,9 @@ public class HomeFragment extends BaseFragment {
 
                 navController.navigate(R.id.navigation_card);
             }
-            Toast.makeText(v.getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
-                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
+                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards")
+                    + " currentFolderContainsFolders: " + keyValueStore.getValueBool("currentFolderContainsFolders"),Toast.LENGTH_SHORT).show();
 
         }
     };
@@ -132,8 +133,9 @@ public class HomeFragment extends BaseFragment {
 //            homeViewModel.getCards(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setCards);
 //        }
 
-        Toast.makeText(fragmentActivity.getApplicationContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
-                        + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
+                + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards")
+                + " currentFolderContainsFolders: " + keyValueStore.getValueBool("currentFolderContainsFolders"),Toast.LENGTH_SHORT).show();
 
         // Create Listener
         filterDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -213,7 +215,8 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
+//                Folder swipedFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
+//                homeViewModel.deleteFolder(swipedFolder);
             }
         };
 
@@ -244,7 +247,6 @@ public class HomeFragment extends BaseFragment {
     private final View.OnClickListener backBtnListener= v -> {
         if(keyValueStore.getValueLong("currentFolderID") != 0) {
             Folder currentFolder = homeViewModel.getFolderWithID(keyValueStore.getValueLong("currentFolderID"));
-            boolean lastFolderContainedCards = keyValueStore.getValueBool("currentFolderContainsCards");
             long parentFolderID = currentFolder.getParentFolderID();
             keyValueStore.editValueLong("currentFolderID", parentFolderID);
 
@@ -262,7 +264,8 @@ public class HomeFragment extends BaseFragment {
             homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), filterDropdown.getSelectedItemPosition()).observe(getViewLifecycleOwner(), adapter::setFolders);
 
             Toast.makeText(v.getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
-                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
+                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards")
+                    + " currentFolderContainsFolders: " + keyValueStore.getValueBool("currentFolderContainsFolders"),Toast.LENGTH_SHORT).show();
 
         }
     };

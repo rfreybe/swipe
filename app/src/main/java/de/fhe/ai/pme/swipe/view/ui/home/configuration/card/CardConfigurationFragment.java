@@ -122,13 +122,17 @@ public class CardConfigurationFragment extends BaseFragment {
         this.CardQuestionField = root.findViewById(R.id.et_question);
         this.CardAnswerField = root.findViewById(R.id.et_answer);
 
-        //ASSIGN BUTTON THE FUNCTION
+        // Save Card
         Button saveBtn = root.findViewById(R.id.btn_save_card);
         saveBtn.setOnClickListener(this.saveCardButtonClickListener);
 
-        // Cambutton
+        // Button for cam integration
         Button openCam = root.findViewById(R.id.btnOpenCam);
         openCam.setOnClickListener(this.openCamClickListener);
+
+        // On Click Listener Back Button
+        ImageView BackBtn = getActivity().findViewById(R.id.back_button);
+        BackBtn.setOnClickListener(this.backBtnListener);
 
         return root;
     }
@@ -170,6 +174,13 @@ public class CardConfigurationFragment extends BaseFragment {
 
         navController.navigate(R.id.navigation_create_folder_or_card);
 
+    };
+
+    private final View.OnClickListener backBtnListener= v -> {
+
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+        navController.navigate(R.id.navigation_create_folder_or_card);
     };
 
 
