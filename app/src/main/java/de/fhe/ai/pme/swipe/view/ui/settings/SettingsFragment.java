@@ -40,9 +40,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        // Wenn der OnClick an ist, crasht die app
         // On Click Listener Back Button
-        ImageView BackBtn = getActivity().findViewById(R.id.back_button);
-        BackBtn.setOnClickListener(this.backBtnListener);
+        //ImageView BackBtn = getActivity().findViewById(R.id.back_button);
+        //BackBtn.setOnClickListener(this.backBtnListener);
 
     }
 
