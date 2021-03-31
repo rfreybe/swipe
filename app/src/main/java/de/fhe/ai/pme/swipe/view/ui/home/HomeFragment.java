@@ -165,7 +165,7 @@ public class HomeFragment extends BaseFragment {
 
         // Configure Item Touch Helper for Drag & Drop Function
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
-                ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+                ItemTouchHelper.RIGHT | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
 
             //TODO: Quick and Dirty Fix for shuffling Bug. OnMove is called 2 times each Drag???
             int lastFromPosition = 0;
@@ -215,8 +215,14 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                Folder swipedFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
-//                homeViewModel.deleteFolder(swipedFolder);
+                switch (direction) {
+                    case ItemTouchHelper.RIGHT:
+                        Folder swipedFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
+                        homeViewModel.deleteFolder(swipedFolder);
+                        break;
+                }
+
+
             }
         };
 

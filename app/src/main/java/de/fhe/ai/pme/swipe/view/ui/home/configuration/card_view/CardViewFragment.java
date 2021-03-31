@@ -52,10 +52,10 @@ public class CardViewFragment extends BaseFragment {
         ratingBad.setOnClickListener(this.ratingBadListener);
 
         TextView text = root.findViewById(R.id.textView4);
-
         text.setText(frontPage.getText());
 
-
+        ImageView card =  root.findViewById(R.id.imageView);
+        card.setImageResource(R.drawable.ic_folder);
 
         final GestureDetector gesture = new GestureDetector(getActivity(),
                 new GestureDetector.SimpleOnGestureListener() {
@@ -102,7 +102,7 @@ public class CardViewFragment extends BaseFragment {
     }
 
 
-    boolean currentPageIsFront = true;
+    boolean currentPageIsFront = false;
 
     private final View.OnClickListener innerLayoutListener= v -> {
 
