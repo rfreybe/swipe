@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="de.fhe.ai.pme.swipe">
 
+
    <uses-feature android:name="android.hardware.camera"
         android:required="true"/>
     <queries>

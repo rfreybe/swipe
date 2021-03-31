@@ -3,6 +3,7 @@ package de.fhe.ai.pme.swipe.view.ui.home.configuration.card;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -47,9 +48,10 @@ import static java.io.File.createTempFile;
 public class CardConfigurationFragment extends BaseFragment {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1337;
+    private static final int REQUEST_IMAGE_PICK = 1338;
+
+
     private String currentPhotoPath;
-    ImageView imageView;
-    Button btnOpenCam;
 
     private CardConfigurationViewModel cardConfigurationViewModel;
     private KeyValueStore keyValueStore;
@@ -57,6 +59,9 @@ public class CardConfigurationFragment extends BaseFragment {
     private EditText CardNameField;
     private EditText CardQuestionField;
     private EditText CardAnswerField;
+
+  
+
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
@@ -76,7 +81,45 @@ public class CardConfigurationFragment extends BaseFragment {
     }
 
 
-    private final View.OnClickListener openCamClickListener = v -> {
+    private final View.OnClickListener openGalleryClickListenerQuestion = v -> {
+        Intent getPictureIntent = new Intent(Intent.ACTION_PICK);
+        getPictureIntent.setType("image/*");
+        startActivityForResult(getPictureIntent, REQUEST_IMAGE_PICK);
+
+    };
+
+    private final View.OnClickListener openGalleryClickListenerAnswer = v -> {
+        Intent getPictureIntent = new Intent(Intent.ACTION_PICK);
+        getPictureIntent.setType("image/*");
+        startActivityForResult(getPictureIntent, REQUEST_IMAGE_PICK);
+
+    };
+
+    private final View.OnClickListener openCamClickListenerQuestion = v -> {
+        Context context = getActivity();
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        //Ensure there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null){
+            //Create the file where the photo should go
+            File photoFile= null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Toast.makeText(context, "Could not create file for image", Toast.LENGTH_SHORT);
+            }
+            //Continue only, if the file was sucessfully created
+            if (photoFile != null){
+                Uri photoURI = FileProvider.getUriForFile(context,
+                        "de.fhe.ai.pme.swipe.fileprovider", photoFile
+                );
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    };
+
+    private final View.OnClickListener openCamClickListenerAnswer = v -> {
         Context context = getActivity();
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -103,11 +146,12 @@ public class CardConfigurationFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+        if((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_PICK) && resultCode == RESULT_OK){
             //übergebe das bild an die karte
             //this.vorderseite.setImageURI( URI.parse(currentPhotoPath));
         }
     }
+
 
 
     @Override
@@ -126,17 +170,23 @@ public class CardConfigurationFragment extends BaseFragment {
         Button saveBtn = root.findViewById(R.id.btn_save_card);
         saveBtn.setOnClickListener(this.saveCardButtonClickListener);
 
-        // Cambutton
-        Button openCam = root.findViewById(R.id.btnOpenCam);
-        openCam.setOnClickListener(this.openCamClickListener);
+        // Cambuttons
+        ImageView QuestionCam = root.findViewById(R.id.QuestionCam);
+        QuestionCam.setOnClickListener(this.openCamClickListenerQuestion);
+
+        ImageView AnswerCam= root.findViewById(R.id.AnswerCam);
+        AnswerCam.setOnClickListener(this.openCamClickListenerAnswer);
+
+        // Picbuttons
+        ImageView QuestionPic= root.findViewById(R.id.QuestionPic);
+        QuestionPic.setOnClickListener(this.openGalleryClickListenerQuestion);
+
+        ImageView AnswerPic = root.findViewById(R.id.AnswerPic);
+        AnswerPic.setOnClickListener(this.openGalleryClickListenerAnswer);
+
+
 
         return root;
-    }
-
-
-
-    public void ClickAddFile(View view){
-
     }
 
     public void ClickSubmitChanges(View view){

@@ -58,21 +58,21 @@
             android:importantForAutofill="no"
             android:inputType=""
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView6"
+            app:layout_constraintEnd_toStartOf="@+id/QuestionCam"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/QuestionCam"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_add_file"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView3"
+            app:layout_constraintEnd_toStartOf="@+id/QuestionPic"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/QuestionPic"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_card"
@@ -105,21 +105,21 @@
             android:importantForAutofill="no"
             android:inputType=""
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView7"
+            app:layout_constraintEnd_toStartOf="@+id/AnswerCam"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/AnswerCam"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_add_file"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintEnd_toStartOf="@+id/AnswerPic"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/AnswerPic"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_card"
@@ -141,14 +141,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"/>
-
-    <Button
-        android:id="@+id/btnOpenCam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="open camera"
-        app:layout_constraintBottom_toTopOf="@+id/btn_save_card"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
