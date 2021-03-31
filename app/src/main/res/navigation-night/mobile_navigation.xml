@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_statistics"
+        android:name="de.fhe.ai.pme.swipe.view.ui.statistics.StatisticsFragment"
+        android:label="@string/title_statistics"
+        tools:layout="@layout/fragment_statistics" />
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="de.fhe.ai.pme.swipe.view.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_create_folder_or_card"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.CreateFolderOrCardFragment"
+        android:label="@string/title_create_folder_or_card"
+        tools:layout="@layout/fragment_create_folder_or_card" />
+
+    <fragment
+        android:id="@+id/navigation_folder_configuration"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.folder.FolderConfigurationFragment"
+        android:label="@string/title_folder_configuration"
+        tools:layout="@layout/fragment_folder_configuration" />
+
+    <fragment
+        android:id="@+id/navigation_card_configuration"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.card.CardConfigurationFragment"
+        android:label="@string/title_card_configuration"
+        tools:layout="@layout/fragment_card_configuration" />
+
+    <fragment
+        android:id="@+id/navigation_card"
+        android:name="de.fhe.ai.pme.swipe.view.ui.home.configuration.card_view.CardViewFragment"
+        android:label="@string/title_card_configuration"
+        tools:layout="@layout/fragment_card" />
+</navigation>
