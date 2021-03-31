@@ -44,5 +44,13 @@ public class  CardConfigurationViewModel extends AndroidViewModel {
         long pageID = pageList.get(pageListSize - 1).getPageID();
         return pageID;
     }
+
+    public int getNextManualOrderID (long parentFolderID) {
+        List<Card> cardList = swipeRepository.getCardsActualValue(parentFolderID);
+        if(cardList == null) {
+            return 0;
+        }
+        return cardList.size();
+    }
 }
 

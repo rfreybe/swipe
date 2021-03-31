@@ -77,6 +77,17 @@ public class SwipeRepository {
         return null;
     }
 
+    private List<Card> queryCardList(Callable<List<Card>> query) {
+        try {
+            return SwipeDatabase.executeWithReturn( query );
+        }
+        catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private List<Page> queryPageList(Callable<List<Page>> query) {
         try {
             return SwipeDatabase.executeWithReturn( query );
@@ -241,22 +252,20 @@ public class SwipeRepository {
         return this.queryLiveData( () -> this.swipeDao.getFoldersByUpdateDesc(parentFolderID) );
     }
 
-    public LiveData<List<Folder>> getFoldersByColorAsc(long parentFolderID)
-    {
-        return this.queryLiveData( () -> this.swipeDao.getFoldersByColorAsc(parentFolderID) );
-    }
-
-    public LiveData<List<Folder>> getFoldersByColorDesc(long parentFolderID)
-    {
-        return this.queryLiveData( () -> this.swipeDao.getFoldersByColorDesc(parentFolderID) );
-    }
-
     /*
         Card-methods
      */
+    public Card getCardByCardID(long cardID) {
+        return this.querySingleCard( () -> this.swipeDao.getCardByCardID(cardID));
+    }
+
     public Card getFirstCardByUserOrder(long parentFolderID, long manualOrderID)
     {
         return this.querySingleCard( () -> this.swipeDao.getFirstCardByUserOrder(parentFolderID, manualOrderID));
+    }
+
+    public List<Card> getCardsActualValue(long parentFolderID) {
+        return this.queryCardList( () -> this.swipeDao.getCardsActualValue(parentFolderID));
     }
 
     public LiveData<List<Card>> getCardsByUserOrder(long parentFolderID)
@@ -296,7 +305,7 @@ public class SwipeRepository {
         Page-methods
      */
     public List<Page> getPages() {
-        return this.queryPageList( () -> this.swipeDao.getAllPages());
+        return this.queryPageList( () -> this.swipeDao.getPagesActualValue());
     }
 
     public Page getPageByID(long pageID) {
