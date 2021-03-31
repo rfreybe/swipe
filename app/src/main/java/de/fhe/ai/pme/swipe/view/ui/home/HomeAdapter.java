@@ -71,11 +71,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         boolean ItemsAreCards = keyValueStore.getValueBool("currentFolderContainsCards");
         if(!ItemsAreCards) {
             if (this.folderList != null && !this.folderList.isEmpty()) {
-                Folder current = this.folderList.get(position);
+                if(position < this.folderList.size()) {
+                    Folder current = this.folderList.get(position);
 
-                // Set Name and Image Resource
-                holder.itemName.setText(current.getName());
-                holder.itemImage.setImageResource(R.drawable.ic_folder);
+                    // Set Name and Image Resource
+                    holder.itemName.setText(current.getName());
+                    holder.itemImage.setImageResource(R.drawable.ic_folder);
+                }
             }
             else {
                 // Covers the case of data not being ready yet.
@@ -84,11 +86,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         }
         else {
             if (this.cardList != null && !this.cardList.isEmpty()) {
-                Card current = this.cardList.get(position);
+                if(position < this.cardList.size()) {
+                    Card current = this.cardList.get(position);
 
-                // Set Name and Image Resource
-                holder.itemName.setText(current.getName());
-                holder.itemImage.setImageResource(R.drawable.ic_card);
+                    // Set Name and Image Resource
+                    holder.itemName.setText(current.getName());
+                    holder.itemImage.setImageResource(R.drawable.ic_card);
+                }
             }
             else {
                 // Covers the case of data not being ready yet.
@@ -101,10 +105,18 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public int getItemCount() {
-        if( this.folderList != null && !this.folderList.isEmpty() )
-            return this.folderList.size();
-        else
-            return 0;
+        if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+            if( this.folderList != null && !this.folderList.isEmpty() )
+                return this.folderList.size();
+            else
+                return 0;
+        }
+        else {
+            if( this.cardList != null && !this.cardList.isEmpty() )
+                return this.cardList.size();
+            else
+                return 0;
+        }
     }
 
     public void setFolders(List<Folder> folders){
@@ -119,7 +131,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         this.folderList.set(fromPosition, toFolder);
         this.folderList.set(toPosition, fromFolder);
     }
-    
+
     public void setCards(List<Card> cards){
         this.cardList = cards;
         notifyDataSetChanged();
@@ -132,6 +144,4 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         this.cardList.set(fromPosition, toCard);
         this.cardList.set(toPosition, fromCard);
     }
-    
-
 }

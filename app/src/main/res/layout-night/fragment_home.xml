@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
-        android:entries="@array/array_folder_dropdown"
+        android:entries="@array/array_filter_dropdown"
         android:spinnerMode="dropdown"
         tools:ignore="MissingConstraints" />
 

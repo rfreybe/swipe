@@ -1,6 +1,7 @@
 package de.fhe.ai.pme.swipe.view.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,54 +33,53 @@ public class HomeFragment extends BaseFragment {
     private KeyValueStore keyValueStore;
     private HomeAdapter adapter;
     private Spinner filterDropdown;
-    private ArrayAdapter<CharSequence> arrayAdapterFolder;
-    private ArrayAdapter<CharSequence> arrayAdapterCard;
-    private static long currentFolderID = 0;
-    private static boolean currentFolderContainsCards = false;
-    private static boolean currentFolderContainsFolders = false;
 
     //TODO: Bug - Sometimes shuffles Folders randomly when swapping them
     // Only after trying to Drag and Drop with other filter then manual order
     RecyclerViewClickListener itemListener = new RecyclerViewClickListener() {
         @Override
         public void itemClick(View v, int position) {
-            if(!currentFolderContainsCards) {
-                Folder clickedFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, position);
+
+            if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+                Folder clickedFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), position);
 
                 // Set Information about current Folder for Fragment and KeyValueStore
-                currentFolderID = clickedFolder.getFolderID();
-                keyValueStore.editValueLong("currentFolderID", currentFolderID);
-                currentFolderContainsCards = clickedFolder.getContainsCards();
-                keyValueStore.editValueBool("currentFolderContainsCards", currentFolderContainsCards);
-                currentFolderContainsFolders = clickedFolder.getContainsFolders();
-                keyValueStore.editValueBool("currentFolderContainsFolders", currentFolderContainsFolders);
+                keyValueStore.editValueLong("currentFolderID", clickedFolder.getFolderID());
+                keyValueStore.editValueBool("currentFolderContainsCards", clickedFolder.getContainsCards());
+                keyValueStore.editValueBool("currentFolderContainsFolders", clickedFolder.getContainsFolders());
 
-                if(!currentFolderContainsCards) {
-                    // Set Folder Spinner
-                    if(filterDropdown.getAdapter() != arrayAdapterFolder) {
-                        String adapterSelectedItemPosition = (String)filterDropdown.getAdapter().getItem(filterDropdown.getSelectedItemPosition());
-                        filterDropdown.setAdapter(arrayAdapterFolder);
-                    }
-
-                    homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
+                if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+                    homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setFolders);
                 }
                 else {
                     // Set Card Spinner
-                    if(filterDropdown.getAdapter() != arrayAdapterCard) {
-                        filterDropdown.setAdapter(arrayAdapterCard);
-                    }
+//                    int selectedItemPosition = filterDropdown.getSelectedItemPosition();
+//                    if(filterDropdown.getAdapter() != arrayAdapterCard) {
+//                        filterDropdown.setAdapter(arrayAdapterCard);
+//                        if(selectedItemPosition == 3 || selectedItemPosition == 4) {
+//                            selectedItemPosition = 0;
+//                        }
+//                        else if(selectedItemPosition == 5 || selectedItemPosition == 6) {
+//                            selectedItemPosition = selectedItemPosition - 2;
+//                        }
+//                    }
 
-                    homeViewModel.getCards(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setCards);
+                    homeViewModel.getCards(keyValueStore.getValueLong("currentFolderID"), filterDropdown.getSelectedItemPosition()).observe(requireActivity(), adapter::setCards);
                 }
             }
             else {
                 //TODO: ViewPager for Cards
             }
+            Toast.makeText(v.getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
+                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
+
         }
     };
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        Log.i("HomeFragment","onCreateView Called");
 
         // Create Layout/Views
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -107,25 +107,27 @@ public class HomeFragment extends BaseFragment {
         recyclerView.setLayoutManager( new LinearLayoutManager(this.requireActivity() ) );
         //recyclerView.setLayoutManager( new GridLayoutManager(this.requireActivity(), 2) );
 
-        // Set initial value for currentFolderContainsCards
-        if(currentFolderID == 0) {
-            currentFolderContainsCards = false;
-            keyValueStore.editValueBool("currentFolderContainsCards", false);
-        }
-
         // Create Spinner Dropdown for Filters
         filterDropdown = root.findViewById(R.id.filters_folder);
 
-        // Array Adapter for Dropdown displayed on Folder View
-        arrayAdapterFolder = ArrayAdapter.createFromResource(getContext(),
-                R.array.array_folder_dropdown, android.R.layout.simple_spinner_item);
-        arrayAdapterFolder.setDropDownViewResource(R.layout.item_dropdown);
-        // Array Adapter for Dropdown displayed on Card View
-        arrayAdapterCard = ArrayAdapter.createFromResource(getContext(),
-                R.array.array_card_dropdown, android.R.layout.simple_spinner_item);
-        arrayAdapterCard.setDropDownViewResource(R.layout.item_dropdown);
+        // Array Adapter for Filter Dropdown
+        ArrayAdapter<CharSequence> arrayAdapterDropdown = ArrayAdapter.createFromResource(getContext(),
+                R.array.array_filter_dropdown, android.R.layout.simple_spinner_item);
+        arrayAdapterDropdown.setDropDownViewResource(R.layout.item_dropdown);
         // Set initial Dropdown on Folder View
-        filterDropdown.setAdapter(arrayAdapterFolder);
+        filterDropdown.setAdapter(arrayAdapterDropdown);
+
+        //keyValueStore.editValueLong("currentFolderID", 0);
+
+//        if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+//            homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setFolders);
+//        }
+//        else {
+//            homeViewModel.getCards(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setCards);
+//        }
+
+        Toast.makeText(fragmentActivity.getApplicationContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
+                        + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
 
         // Create Listener
         filterDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -133,21 +135,21 @@ public class HomeFragment extends BaseFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Observe the LiveData Contact List in our View Model - if something changes, we
                 // update the list in our Adapter
-                if(!currentFolderContainsCards) {
-                    homeViewModel.getFolders(currentFolderID, position).observe(fragmentActivity, adapter::setFolders);
+                if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+                    homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), position).observe(fragmentActivity, adapter::setFolders);
                 }
                 else {
-                    homeViewModel.getCards(currentFolderID, position).observe(fragmentActivity, adapter::setCards);
+                    homeViewModel.getCards(keyValueStore.getValueLong("currentFolderID"), position).observe(fragmentActivity, adapter::setCards);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                if(!currentFolderContainsCards) {
-                    homeViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+                if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+                    homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setFolders);
                 }
                 else {
-                    homeViewModel.getCards(currentFolderID, 0).observe(fragmentActivity, adapter::setCards);
+                    homeViewModel.getCards(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setCards);
                 }
             }
 
@@ -170,9 +172,9 @@ public class HomeFragment extends BaseFragment {
                     int fromPosition = viewHolder.getAdapterPosition();
                     int toPosition = target.getAdapterPosition();
                     if(lastFromPosition != fromPosition || lastToPosition != toPosition) {
-                        if(!currentFolderContainsCards) {
-                            Folder fromFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, fromPosition);
-                            Folder toFolder = homeViewModel.getSingleFolderByManualOrder(currentFolderID, toPosition);
+                        if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+                            Folder fromFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), fromPosition);
+                            Folder toFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), toPosition);
 
                             fromFolder.setManualOrderID(toPosition);
                             toFolder.setManualOrderID(fromPosition);
@@ -180,11 +182,11 @@ public class HomeFragment extends BaseFragment {
                             homeViewModel.updateFolder(toFolder);
 
                             adapter.swapFolders(fromPosition, toPosition);
-                            homeViewModel.getFolders(currentFolderID, 0).observe(fragmentActivity, adapter::setFolders);
+                            homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setFolders);
                         }
                         else {
-                            Card fromCard = homeViewModel.getSingleCardByManualOrder(currentFolderID, fromPosition);
-                            Card toCard = homeViewModel.getSingleCardByManualOrder(currentFolderID, toPosition);
+                            Card fromCard = homeViewModel.getSingleCardByManualOrder(keyValueStore.getValueLong("currentFolderID"), fromPosition);
+                            Card toCard = homeViewModel.getSingleCardByManualOrder(keyValueStore.getValueLong("currentFolderID"), toPosition);
 
                             fromCard.setManualOrderID(toPosition);
                             toCard.setManualOrderID(fromPosition);
@@ -192,7 +194,7 @@ public class HomeFragment extends BaseFragment {
                             homeViewModel.updateCard(toCard);
 
                             adapter.swapCards(fromPosition, toPosition);
-                            homeViewModel.getCards(currentFolderID, 0).observe(fragmentActivity, adapter::setCards);
+                            homeViewModel.getCards(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setCards);
                         }
 
                         lastFromPosition = fromPosition;
@@ -238,25 +240,28 @@ public class HomeFragment extends BaseFragment {
 
     // Change currentFolderID to ID of parentFolder
     private final View.OnClickListener backBtnListener= v -> {
-        if(currentFolderID != 0) {
-            Folder currentFolder = homeViewModel.getFolderWithID(currentFolderID);
+        if(keyValueStore.getValueLong("currentFolderID") != 0) {
+            Folder currentFolder = homeViewModel.getFolderWithID(keyValueStore.getValueLong("currentFolderID"));
+            boolean lastFolderContainedCards = keyValueStore.getValueBool("currentFolderContainsCards");
             long parentFolderID = currentFolder.getParentFolderID();
             keyValueStore.editValueLong("currentFolderID", parentFolderID);
-            currentFolderID = parentFolderID;
 
-            if(currentFolderID != 0) {
-                Folder parentFolder = homeViewModel.getFolderWithID(currentFolderID);
+            if(keyValueStore.getValueLong("currentFolderID") != 0) {
+                Folder parentFolder = homeViewModel.getFolderWithID(keyValueStore.getValueLong("currentFolderID"));
                 keyValueStore.editValueBool("currentFolderContainsCards", parentFolder.getContainsCards());
                 keyValueStore.editValueBool("currentFolderContainsFolders", parentFolder.getContainsFolders());
+
             }
             else {
-                currentFolderContainsCards = false;
                 keyValueStore.editValueBool("currentFolderContainsCards", false);
-                currentFolderContainsFolders = true;
                 keyValueStore.editValueBool("currentFolderContainsFolders", true);
             }
 
-            homeViewModel.getFolders(currentFolderID, filterDropdown.getSelectedItemPosition()).observe(getViewLifecycleOwner(), adapter::setFolders);
+            homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), filterDropdown.getSelectedItemPosition()).observe(getViewLifecycleOwner(), adapter::setFolders);
+
+            Toast.makeText(v.getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
+                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
+
         }
     };
 

@@ -159,7 +159,9 @@ public class CardConfigurationFragment extends BaseFragment {
 
 
         //Create Card
-        Card newCard = new Card(CardNameField.getText().toString(), keyValueStore.getValueLong("currentFolderID"), frontPageID, backPageID);
+        long currentFolderID = keyValueStore.getValueLong("currentFolderID");
+        Card newCard = new Card(CardNameField.getText().toString(), currentFolderID, frontPageID, backPageID);
+        newCard.setManualOrderID(cardConfigurationViewModel.getNextManualOrderID(newCard.getParentFolderID()));
         cardConfigurationViewModel.saveCard(newCard);
 
         keyValueStore.editValueBool("currentFolderContainsCards", true);

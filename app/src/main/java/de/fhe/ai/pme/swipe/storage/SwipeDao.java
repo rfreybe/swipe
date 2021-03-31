@@ -83,17 +83,14 @@ public interface SwipeDao {
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY modified DESC")
     LiveData<List<Folder>> getFoldersByUpdateDesc(long folderID);
 
-    @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY color, modified ASC")
-    LiveData<List<Folder>> getFoldersByColorAsc(long folderID);
-
-    @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY color, modified DESC")
-    LiveData<List<Folder>> getFoldersByColorDesc(long folderID);
-
     /*
         Function Methods Card
     */
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID AND manualOrderID LIKE :manualOrderID")
     Card getFirstCardByUserOrder(long folderID, long manualOrderID);
+
+    @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
+    List<Card> getCardsActualValue(long folderID);
 
      /*
         Select-statements for Card
@@ -114,10 +111,15 @@ public interface SwipeDao {
     LiveData<List<Card>> getCardsByUpdateDesc(long folderID);
 
     /*
-        Select-statements for Page
+        Function Methods Page
      */
     @Query("SELECT * FROM Page")
-    List<Page> getAllPages();
+    List<Page> getPagesActualValue();
+
+    /*
+        Select-statements for Page
+     */
+
 
     @Query("SELECT * FROM Page WHERE pageID LIKE :pageID")
     Page getPageByID(long pageID);

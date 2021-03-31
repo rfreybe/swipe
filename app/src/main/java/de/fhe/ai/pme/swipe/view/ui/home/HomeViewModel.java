@@ -31,13 +31,10 @@ public class HomeViewModel extends AndroidViewModel {
             case 2:
                 return swipeRepository.getFoldersByNameDesc(parentFolderID);
             case 3:
-                return swipeRepository.getFoldersByColorAsc(parentFolderID);
-            case 4:
-                return swipeRepository.getFoldersByColorDesc(parentFolderID);
-            case 5:
                 return swipeRepository.getFoldersByUpdateAsc(parentFolderID);
-            case 6:
+            case 4:
                 return swipeRepository.getFoldersByUpdateDesc(parentFolderID);
+
         }
     }
 
