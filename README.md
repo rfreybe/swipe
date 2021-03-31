@@ -1,4 +1,4 @@
-# Tech4Kek
+# swipe
 
 Für das Modul <b>PME</b> entwickeln wir in unserem Team eine Java-Applikation names SWIPE.ME.
 
