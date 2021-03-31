@@ -51,6 +51,9 @@ public class CardViewFragment extends BaseFragment {
         ImageView ratingBad = root.findViewById(R.id.rating_bad);
         ratingBad.setOnClickListener(this.ratingBadListener);
 
+        TextView text = root.findViewById(R.id.textView4);
+
+        text.setText(frontPage.getText());
 
 
 
