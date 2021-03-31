@@ -10,15 +10,18 @@ import java.util.List;
 import de.fhe.ai.pme.swipe.model.Card;
 import de.fhe.ai.pme.swipe.model.Folder;
 import de.fhe.ai.pme.swipe.model.Page;
+import de.fhe.ai.pme.swipe.storage.KeyValueStore;
 import de.fhe.ai.pme.swipe.storage.SwipeRepository;
 
 public class HomeViewModel extends AndroidViewModel {
 
     private final SwipeRepository swipeRepository;
+    private final KeyValueStore keyValueStore;
 
     public HomeViewModel(Application application) {
         super(application);
         swipeRepository = SwipeRepository.getRepository(application);
+        keyValueStore = new KeyValueStore(getApplication());
     }
 
     // Switch Case decides which Repository Method to use according to filter
@@ -99,5 +102,49 @@ public class HomeViewModel extends AndroidViewModel {
             }
         }
         swipeRepository.delete(folder);
+
+        List<Folder> folderListInParentFolder = swipeRepository.getFoldersActualValue(folder.getParentFolderID());
+        long currentManualOrderID = folder.getManualOrderID();
+
+        for(Folder pf : folderListInParentFolder) {
+            if(pf.getManualOrderID() > currentManualOrderID) {
+                long newManualOrder = pf.getManualOrderID() - 1;
+                pf.setManualOrderID(newManualOrder);
+                swipeRepository.update(pf);
+            }
+        }
+
+        if(folder.getParentFolderID() != 0) {
+            if(folderListInParentFolder.isEmpty()) {
+                Folder parentFolder = swipeRepository.getFolderWithID(folder.getParentFolderID());
+                parentFolder.setContainsFolders(false);
+                keyValueStore.editValueBool("currentFolderContainsFolders", false);
+            }
+        }
+        else {
+            if (folderListInParentFolder.isEmpty()) {
+                keyValueStore.editValueBool("currentFolderContainsFolders", false);
+            }
+        }
+    }
+
+    public void deleteCard(Card card) {
+
+        List<Card> cardListInParentFolder = swipeRepository.getCardsActualValue(card.getParentFolderID());
+        long currentManualOrderID = card.getManualOrderID();
+
+        swipeRepository.delete(card);
+
+        for(Card pf : cardListInParentFolder) {
+            if(pf.getManualOrderID() > currentManualOrderID) {
+                long newManualOrder = pf.getManualOrderID() - 1;
+                pf.setManualOrderID(newManualOrder);
+                swipeRepository.update(pf);
+            }
+        }
+
+        if(cardListInParentFolder.isEmpty()) {
+            keyValueStore.editValueBool("currentFolderContainsCards", false);
+        }
     }
 }

@@ -34,8 +34,6 @@ public class HomeFragment extends BaseFragment {
     private HomeAdapter adapter;
     private Spinner filterDropdown;
 
-    //TODO: Bug - Sometimes shuffles Folders randomly when swapping them
-    // Only after trying to Drag and Drop with other filter then manual order
     RecyclerViewClickListener itemListener = new RecyclerViewClickListener() {
         @Override
         public void itemClick(View v, int position) {
@@ -68,7 +66,6 @@ public class HomeFragment extends BaseFragment {
                 }
             }
             else {
-                //TODO: ViewPager for Cards
                 long clickedCardID = homeViewModel.getSingleCardByManualOrder(keyValueStore.getValueLong("currentFolderID"), position).getCardID();
                 keyValueStore.editValueLong("currentlyViewedCardID", clickedCardID);
 
@@ -76,10 +73,6 @@ public class HomeFragment extends BaseFragment {
 
                 navController.navigate(R.id.navigation_card);
             }
-            Toast.makeText(getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
-                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards")
-                    + " currentFolderContainsFolders: " + keyValueStore.getValueBool("currentFolderContainsFolders"),Toast.LENGTH_SHORT).show();
-
         }
     };
 
@@ -133,10 +126,6 @@ public class HomeFragment extends BaseFragment {
 //            homeViewModel.getCards(keyValueStore.getValueLong("currentFolderID"), 0).observe(fragmentActivity, adapter::setCards);
 //        }
 
-        Toast.makeText(getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
-                + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards")
-                + " currentFolderContainsFolders: " + keyValueStore.getValueBool("currentFolderContainsFolders"),Toast.LENGTH_SHORT).show();
-
         // Create Listener
         filterDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -164,10 +153,9 @@ public class HomeFragment extends BaseFragment {
         });
 
         // Configure Item Touch Helper for Drag & Drop Function
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
-                ItemTouchHelper.RIGHT | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP
+                | ItemTouchHelper.START | ItemTouchHelper.DOWN | ItemTouchHelper.END, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
 
-            //TODO: Quick and Dirty Fix for shuffling Bug. OnMove is called 2 times each Drag???
             int lastFromPosition = 0;
             int lastToPosition = 0;
             @Override
@@ -216,13 +204,19 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 switch (direction) {
-                    case ItemTouchHelper.RIGHT:
-                        Folder swipedFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
-                        homeViewModel.deleteFolder(swipedFolder);
+                    case ItemTouchHelper.LEFT:
+                        if(!keyValueStore.getValueBool("currentFolderContainsCards")) {
+                            Folder swipedFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
+                            homeViewModel.deleteFolder(swipedFolder);
+                            adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                        }
+                        else {
+                            Card swipedCard = homeViewModel.getSingleCardByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
+                            homeViewModel.deleteCard(swipedCard);
+                            adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                        }
                         break;
                 }
-
-
             }
         };
 
@@ -268,10 +262,6 @@ public class HomeFragment extends BaseFragment {
             }
 
             homeViewModel.getFolders(keyValueStore.getValueLong("currentFolderID"), filterDropdown.getSelectedItemPosition()).observe(getViewLifecycleOwner(), adapter::setFolders);
-
-            Toast.makeText(v.getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
-                    + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards")
-                    + " currentFolderContainsFolders: " + keyValueStore.getValueBool("currentFolderContainsFolders"),Toast.LENGTH_SHORT).show();
 
         }
     };

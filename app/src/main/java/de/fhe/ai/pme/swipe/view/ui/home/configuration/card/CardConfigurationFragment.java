@@ -50,15 +50,13 @@ public class CardConfigurationFragment extends BaseFragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1337;
     private static final int REQUEST_IMAGE_PICK = 1338;
 
-
     private String currentPhotoPath;
-
     private CardConfigurationViewModel cardConfigurationViewModel;
     private KeyValueStore keyValueStore;
-
     private EditText CardNameField;
     private EditText CardQuestionField;
     private EditText CardAnswerField;
+
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
@@ -79,7 +77,7 @@ public class CardConfigurationFragment extends BaseFragment {
 
 
     private final View.OnClickListener openGalleryClickListenerQuestion = v -> {
-        Intent getPictureIntent = new Intent(Intent.ACTION_PICK);
+        Intent getPictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         getPictureIntent.setType("image/*");
         startActivityForResult(getPictureIntent, REQUEST_IMAGE_PICK);
 
@@ -182,7 +180,6 @@ public class CardConfigurationFragment extends BaseFragment {
         AnswerPic.setOnClickListener(this.openGalleryClickListenerAnswer);
 
 
-
         // On Click Listener Back Button
         ImageView BackBtn = getActivity().findViewById(R.id.back_button);
         BackBtn.setOnClickListener(this.backBtnListener);
@@ -208,7 +205,6 @@ public class CardConfigurationFragment extends BaseFragment {
         cardConfigurationViewModel.savePage(backPage);
         long backPageID = cardConfigurationViewModel.getLastCreatedPageID();
 
-
         //Create Card
         long currentFolderID = keyValueStore.getValueLong("currentFolderID");
         Card newCard = new Card(CardNameField.getText().toString(), currentFolderID, frontPageID, backPageID);
@@ -218,7 +214,6 @@ public class CardConfigurationFragment extends BaseFragment {
         keyValueStore.editValueBool("currentFolderContainsCards", true);
 
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
         navController.navigate(R.id.navigation_create_folder_or_card);
 
     };
@@ -226,7 +221,6 @@ public class CardConfigurationFragment extends BaseFragment {
     private final View.OnClickListener backBtnListener= v -> {
 
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
         navController.navigate(R.id.navigation_create_folder_or_card);
     };
 

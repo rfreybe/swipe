@@ -57,6 +57,10 @@ public class CardViewFragment extends BaseFragment {
         ImageView card =  root.findViewById(R.id.imageView);
         card.setImageResource(R.drawable.ic_folder);
 
+        // On Click Listener Back Button
+        ImageView BackBtn = getActivity().findViewById(R.id.back_button);
+        BackBtn.setOnClickListener(this.backBtnListener);
+
         final GestureDetector gesture = new GestureDetector(getActivity(),
                 new GestureDetector.SimpleOnGestureListener() {
 
@@ -155,6 +159,14 @@ public class CardViewFragment extends BaseFragment {
         int badValue = keyValueStore.getValueInt("badValue");
         ++badValue;
         keyValueStore.editValueInt("badValue",badValue);
+    };
+
+    // Redirect to Home Fragment
+    private final View.OnClickListener backBtnListener= v -> {
+
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+        navController.navigate(R.id.navigation_home);
     };
 }
 
