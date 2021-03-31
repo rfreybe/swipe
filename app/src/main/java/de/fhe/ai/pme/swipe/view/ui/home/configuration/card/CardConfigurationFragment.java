@@ -106,7 +106,7 @@ public class CardConfigurationFragment extends BaseFragment {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                Toast.makeText(context, "Could not create file for image", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "Datei konnte nicht erstellt werden", Toast.LENGTH_SHORT);
             }
             //Continue only, if the file was sucessfully created
             if (photoFile != null){
@@ -131,7 +131,7 @@ public class CardConfigurationFragment extends BaseFragment {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                Toast.makeText(context, "Could not create file for image", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "Datei konnte nicht erstellt werden", Toast.LENGTH_SHORT);
             }
             //Continue only, if the file was sucessfully created
             if (photoFile != null){
@@ -150,6 +150,7 @@ public class CardConfigurationFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_PICK)) {
             filesOk = true;
+            Toast.makeText(getContext(), "Foto erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
         }
     }
 

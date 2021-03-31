@@ -293,14 +293,6 @@ public class SwipeRepository {
         return this.queryLiveData( () -> this.swipeDao.getCardsByUpdateDesc(parentFolderID) );
     }
 
-//    public List<Card> shuffleCards(int parentFolderID)
-//    {
-//        List<Card> shuffledList = this.swipeDao.getCardsByUpdateAsc(parentFolderID);
-//        Collections.shuffle(shuffledList);
-//        return this.queryCard( () ->  shuffledList);
-//    }
-
-
     /*
         Page-methods
      */

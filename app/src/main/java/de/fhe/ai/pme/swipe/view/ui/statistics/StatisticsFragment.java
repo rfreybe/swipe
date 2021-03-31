@@ -20,18 +20,13 @@ import de.fhe.ai.pme.swipe.storage.KeyValueStore;
 
 public class StatisticsFragment extends BaseFragment {
 
-
-
     private KeyValueStore keyValueStore;
-
-    private StatisticsViewModel statisticsViewModel;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_statistics, container, false);
         this.keyValueStore = new KeyValueStore(getActivity().getApplication());
-        statisticsViewModel = this.getViewModel(StatisticsViewModel.class);
 
         int goodValue = keyValueStore.getValueInt("goodValue");
         int badValue = keyValueStore.getValueInt("badValue");

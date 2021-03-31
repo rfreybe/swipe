@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.second_toolbar);
         setSupportActionBar(toolbar);
 
-        ImageView test = findViewById(R.id.back_button);
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

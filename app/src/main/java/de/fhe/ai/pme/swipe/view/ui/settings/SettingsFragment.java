@@ -24,13 +24,9 @@ import de.fhe.ai.pme.swipe.model.Folder;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private SettingsViewModel settingsViewModel;
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
-
-
 
         findPreference(Constants.PREF_DARK_MODE).setOnPreferenceChangeListener((preference, newValue) -> {
             AppCompatDelegate.setDefaultNightMode(
@@ -40,10 +36,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        // Wenn der OnClick an ist, crasht die app
+        // Causes Problems with Fragment
         // On Click Listener Back Button
-        //ImageView BackBtn = getActivity().findViewById(R.id.back_button);
-        //BackBtn.setOnClickListener(this.backBtnListener);
+//        ImageView BackBtn = getActivity().findViewById(R.id.back_button);
+//        BackBtn.setOnClickListener(this.backBtnListener);
 
     }
 

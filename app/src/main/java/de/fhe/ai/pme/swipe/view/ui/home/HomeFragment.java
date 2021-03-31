@@ -209,11 +209,13 @@ public class HomeFragment extends BaseFragment {
                             Folder swipedFolder = homeViewModel.getSingleFolderByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
                             homeViewModel.deleteFolder(swipedFolder);
                             adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                            Toast.makeText(getContext(), "Ordner erfolgreich gelöscht!", Toast.LENGTH_LONG).show();
                         }
                         else {
                             Card swipedCard = homeViewModel.getSingleCardByManualOrder(keyValueStore.getValueLong("currentFolderID"), viewHolder.getAdapterPosition());
                             homeViewModel.deleteCard(swipedCard);
                             adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                            Toast.makeText(getContext(), "Karte erfolgreich gelöscht!", Toast.LENGTH_LONG).show();
                         }
                         break;
                 }

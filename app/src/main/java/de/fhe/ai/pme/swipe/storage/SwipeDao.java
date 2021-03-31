@@ -54,7 +54,9 @@ public interface SwipeDao {
     @Query("DELETE FROM Folder WHERE folderID LIKE :folderID OR parentFolderID LIKE :folderID")
     void deleteFolder(long folderID);
 
-    /* Function Methods Folder */
+    /*
+        Folder
+    */
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     Folder getFirstFolder(long folderID);
 
@@ -67,7 +69,6 @@ public interface SwipeDao {
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     List<Folder> getFoldersActualValue(long folderID);
 
-    /* Filter Methods Folder */
     @Query("SELECT * FROM Folder WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     LiveData<List<Folder>> getFoldersByUserOrder(long folderID);
 
@@ -84,7 +85,7 @@ public interface SwipeDao {
     LiveData<List<Folder>> getFoldersByUpdateDesc(long folderID);
 
     /*
-        Function Methods Card
+        Card
     */
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID AND manualOrderID LIKE :manualOrderID")
     Card getFirstCardByUserOrder(long folderID, long manualOrderID);
@@ -92,9 +93,6 @@ public interface SwipeDao {
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     List<Card> getCardsActualValue(long folderID);
 
-     /*
-        Select-statements for Card
-     */
     @Query("SELECT * FROM Card WHERE cardID LIKE :cardID")
     Card getCardByCardID(long cardID);
 
@@ -114,15 +112,10 @@ public interface SwipeDao {
     LiveData<List<Card>> getCardsByUpdateDesc(long folderID);
 
     /*
-        Function Methods Page
-     */
+        Page
+    */
     @Query("SELECT * FROM Page")
     List<Page> getPagesActualValue();
-
-    /*
-        Select-statements for Page
-     */
-
 
     @Query("SELECT * FROM Page WHERE pageID LIKE :pageID")
     Page getPageByID(long pageID);

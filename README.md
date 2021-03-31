@@ -43,8 +43,8 @@ Für das Modul <b>PME</b> entwickeln wir in unserem Team eine Java-Applikation n
 -Leichte bedienbarkeit durch swipen<br>
 -Kategorien mit Unterordnern, in denen sich die Karteikarten befinden<br>
 -Anzeige der Karteikarten innerhalb eines Ordners geordnet oder geshuffelt<br>
--Sidebar->Ordner->Fächer->Karteikarte<br>
--Sidebar->Ordnereinstellung---Ordner Sortieren nach---Karteikarten Sortieren nach---Filtern nach<br>
+-Navigtion Bar->Ordner->Fächer->Karteikarte<br>
+-Dropdown->Ordnereinstellung---Ordner Sortieren nach---Karteikarten Sortieren nach---Filtern nach<br>
 -Plusbutton unten rechts--Welcher Ordner(Ordner hinzufügen,zurück)--Welche Kategorie(Kategorie hinzufügen,zurück)<br>
 -Sidebar->Einstellungen(unten links)--Sprache<br>
 -Einstellungen--Sounds--Sprache<br>
