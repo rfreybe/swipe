@@ -55,7 +55,7 @@ public class CardViewFragment extends BaseFragment {
         text.setText(frontPage.getText());
 
         ImageView card =  root.findViewById(R.id.imageView);
-        card.setImageResource(R.drawable.ic_folder);
+        card.setImageResource(R.drawable.ic_baseline_camera_front_24);
 
         // On Click Listener Back Button
         ImageView BackBtn = getActivity().findViewById(R.id.back_button);
@@ -118,11 +118,11 @@ public class CardViewFragment extends BaseFragment {
         innerLayout.animate().rotationYBy(180f).start();
         if(currentPageIsFront){
             if(frontPage.getFile() == null) {
-                card.setImageResource(R.drawable.ic_folder);
+                card.setImageResource(R.drawable.ic_baseline_camera_front_24);
             }
             else {
                 // TODO: Set File Path
-                card.setImageResource(R.drawable.ic_folder);
+                card.setImageResource(R.drawable.ic_baseline_camera_front_24);
             }
             text.setText(frontPage.getText());
             innerLayout.animate().rotationYBy(360f).start();
@@ -130,11 +130,11 @@ public class CardViewFragment extends BaseFragment {
 
         } else {
             if(backPage.getFile() == null) {
-                card.setImageResource(R.drawable.ic_add_file);
+                card.setImageResource(R.drawable.ic_baseline_camera_rear_24);
             }
             else {
                 // TODO: Set File Path
-                card.setImageResource(R.drawable.ic_add_file);
+                card.setImageResource(R.drawable.ic_baseline_camera_rear_24);
             }
             text.setText(backPage.getText());
             innerLayout.animate().rotationYBy(360f).start();
