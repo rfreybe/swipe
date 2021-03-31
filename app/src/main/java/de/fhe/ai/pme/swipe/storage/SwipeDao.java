@@ -95,6 +95,9 @@ public interface SwipeDao {
      /*
         Select-statements for Card
      */
+    @Query("SELECT * FROM Card WHERE cardID LIKE :cardID")
+    Card getCardByCardID(long cardID);
+
     @Query("SELECT * FROM Card WHERE parentFolderID LIKE :folderID ORDER BY manualOrderID")
     LiveData<List<Card>> getCardsByUserOrder(long folderID);
 

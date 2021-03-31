@@ -17,18 +17,30 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import java.security.Key;
+
 import de.fhe.ai.pme.swipe.R;
+import de.fhe.ai.pme.swipe.model.Card;
+import de.fhe.ai.pme.swipe.model.Page;
+import de.fhe.ai.pme.swipe.storage.KeyValueStore;
 import de.fhe.ai.pme.swipe.view.ui.core.BaseFragment;
 
 public class CardViewFragment extends BaseFragment {
 
     private View root;
+    private CardViewViewModel viewModel;
+    private KeyValueStore keyValueStore;
+    private Page frontPage;
+    private Page backPage;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         this.root = inflater.inflate(R.layout.fragment_card, container, false);
-
+        this.keyValueStore = new KeyValueStore(getActivity().getApplication());
+        this.viewModel = this.getViewModel(CardViewViewModel.class);
+        this.frontPage = this.viewModel.getFrontPage(keyValueStore.getValueLong("currentlyViewedCardID"));
+        this.backPage = this.viewModel.getBackPage(keyValueStore.getValueLong("currentlyViewedCardID"));
 
         ConstraintLayout innerLayout = root.findViewById(R.id.inner_layout);
         innerLayout.setOnClickListener(this.innerLayoutListener);
@@ -38,6 +50,8 @@ public class CardViewFragment extends BaseFragment {
 
         ImageView ratingBad = root.findViewById(R.id.rating_bad);
         ratingBad.setOnClickListener(this.ratingBadListener);
+
+
 
 
         final GestureDetector gesture = new GestureDetector(getActivity(),
@@ -87,7 +101,6 @@ public class CardViewFragment extends BaseFragment {
 
     boolean currentPageIsFront = true;
 
-
     private final View.OnClickListener innerLayoutListener= v -> {
 
         ImageView card =  root.findViewById(R.id.imageView);
@@ -97,14 +110,26 @@ public class CardViewFragment extends BaseFragment {
 
         innerLayout.animate().rotationYBy(180f).start();
         if(currentPageIsFront){
-            card.setImageResource(R.drawable.ic_folder);
-            text.setText("FrontPage");
+            if(frontPage.getFile() == null) {
+                card.setImageResource(R.drawable.ic_folder);
+            }
+            else {
+                // TODO: Set File Path
+                card.setImageResource(R.drawable.ic_folder);
+            }
+            text.setText(frontPage.getText());
             innerLayout.animate().rotationYBy(360f).start();
             currentPageIsFront = false;
 
         } else {
-            card.setImageResource(R.drawable.ic_add_file);
-            text.setText("BackPage");
+            if(backPage.getFile() == null) {
+                card.setImageResource(R.drawable.ic_add_file);
+            }
+            else {
+                // TODO: Set File Path
+                card.setImageResource(R.drawable.ic_add_file);
+            }
+            text.setText(backPage.getText());
             innerLayout.animate().rotationYBy(360f).start();
             currentPageIsFront = true;
         }

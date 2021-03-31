@@ -69,6 +69,12 @@ public class HomeFragment extends BaseFragment {
             }
             else {
                 //TODO: ViewPager for Cards
+                long clickedCardID = homeViewModel.getSingleCardByManualOrder(keyValueStore.getValueLong("currentFolderID"), position).getCardID();
+                keyValueStore.editValueLong("currentlyViewedCardID", clickedCardID);
+
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+                navController.navigate(R.id.navigation_card);
             }
             Toast.makeText(v.getContext(), "currentFolderID: " + String.valueOf( keyValueStore.getValueLong("currentFolderID"))
                     + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
@@ -219,15 +225,11 @@ public class HomeFragment extends BaseFragment {
         ImageView AddFolderOrCardBtn = root.findViewById(R.id.btn_add_folder_or_card);
         AddFolderOrCardBtn.setOnClickListener(this.addFolderOrCardClickListener);
 
-        ImageView cardBtn = root.findViewById(R.id.btn_card);
-        cardBtn.setOnClickListener(this.addCardClickListener);
-
         // On Click Listener Back Button
         ImageView BackBtn = getActivity().findViewById(R.id.back_button);
         BackBtn.setOnClickListener(this.backBtnListener);
 
         return root;
-
     }
 
     //Redirect to CreateFolderOrCard Fragment
@@ -263,12 +265,5 @@ public class HomeFragment extends BaseFragment {
                     + " currentFolderContainsCards: " + keyValueStore.getValueBool("currentFolderContainsCards"),Toast.LENGTH_LONG).show();
 
         }
-    };
-
-    private final View.OnClickListener addCardClickListener= v -> {
-
-        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
-        navController.navigate(R.id.navigation_card);
     };
 }

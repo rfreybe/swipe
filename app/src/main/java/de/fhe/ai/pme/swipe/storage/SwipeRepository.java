@@ -255,6 +255,10 @@ public class SwipeRepository {
     /*
         Card-methods
      */
+    public Card getCardByCardID(long cardID) {
+        return this.querySingleCard( () -> this.swipeDao.getCardByCardID(cardID));
+    }
+
     public Card getFirstCardByUserOrder(long parentFolderID, long manualOrderID)
     {
         return this.querySingleCard( () -> this.swipeDao.getFirstCardByUserOrder(parentFolderID, manualOrderID));
