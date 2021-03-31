@@ -31,7 +31,7 @@ Für das Modul <b>PME</b> entwickeln wir in unserem Team eine Java-Applikation n
 <summary> ER-Modell der Datenbank </summary>
 <br>
 
-![alt text]()
+![alt text](https://i.ibb.co/10S7qZ1/Bild-2021-03-31-203119.png)
 </details>
 
 <details>
